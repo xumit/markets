@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>India Conditions Readout</title>
+<meta name="description" content="Nine Indian market measures — breadth, rupee, G-sec volatility, India VIX, growth, financials and crude in rupees — each scored against its own past year.">
+<meta property="og:title" content="India Conditions Readout">
+<meta property="og:description" content="Nine Indian market measures — breadth, rupee, G-sec volatility, India VIX, growth, financials and crude in rupees — each scored against its own past year.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='14' font-size='14'>&#128200;</text></svg>">
+<style>
+  html{-webkit-text-size-adjust:100%}
+  :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+  body{margin:0}
+  img{max-width:100%}
+  [hidden]{display:none!important}
+</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#EDF0F3; --surface:#FFFFFF; --sunk:#E3E8ED; --ink:#16202B; --ink2:#3C4A57; --muted:#667482;
+  --rule:#D3DAE1; --band:#DCE2E8; --stretch:#B06A00; --stretch-soft:#F6E7CF;
+  --on:#1C7466; --on-soft:#D6EDE8; --off:#AE4330; --off-soft:#F5DDD7; --line:#2A3A4A;
+  --display:"Barlow Semi Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){color-scheme:dark;
+    --ground:#0E141A; --surface:#151D25; --sunk:#1C2630; --ink:#E4EAF0; --ink2:#BFC9D3; --muted:#8E9CAA;
+    --rule:#2A3643; --band:#233040; --stretch:#E3A13A; --stretch-soft:#3A2C14;
+    --on:#4DB3A2; --on-soft:#15332E; --off:#E27B66; --off-soft:#3C1F19; --line:#C9D4DE;}
+}
+:root[data-theme="dark"]{color-scheme:dark;
+  --ground:#0E141A; --surface:#151D25; --sunk:#1C2630; --ink:#E4EAF0; --ink2:#BFC9D3; --muted:#8E9CAA;
+  --rule:#2A3643; --band:#233040; --stretch:#E3A13A; --stretch-soft:#3A2C14;
+  --on:#4DB3A2; --on-soft:#15332E; --off:#E27B66; --off-soft:#3C1F19; --line:#C9D4DE;}
+
+body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:20px;padding-block:24px 48px;display:flex;flex-direction:column;gap:28px}
+h1,h2{font-family:var(--display);font-weight:600;letter-spacing:.01em;text-wrap:balance;margin:0}
+h1{font-size:30px;line-height:1.1}
+h2{font-size:20px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+p{margin:0}
+.muted{color:var(--muted)}
+
+header{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between}
+.hgroup{display:flex;flex-direction:column;gap:6px}
+.hmeta{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.navlink{font:600 14px var(--body);color:var(--ink);text-decoration:none;border:1px solid var(--rule);border-radius:6px;padding:8px 14px;background:var(--surface)}
+.navlink:hover{border-color:var(--muted)}
+.navlink:focus-visible{outline:2px solid var(--stretch);outline-offset:2px}
+button{font:600 14px var(--body);color:var(--ink);background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:8px 14px;cursor:pointer}
+button:hover{border-color:var(--muted)}
+button:focus-visible{outline:2px solid var(--stretch);outline-offset:2px}
+button[disabled]{opacity:.6;cursor:progress}
+
+.banner{border:1px solid var(--off);background:var(--off-soft);border-radius:8px;padding:12px 16px}
+
+/* verdict */
+.verdict{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:18px 20px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px}
+.vtitle{font-family:var(--display);font-size:26px;font-weight:600;line-height:1.15}
+.vtitle.mixed{color:var(--ink)} .vtitle.off{color:var(--off)} .vtitle.on{color:var(--on)}
+.tally{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.pill{display:inline-flex;align-items:center;gap:6px;font:500 12px var(--mono);padding:3px 9px;border-radius:999px;background:var(--sunk);color:var(--ink2);white-space:nowrap}
+.pill.on{background:var(--on-soft);color:var(--on)} .pill.off{background:var(--off-soft);color:var(--off)}
+.pill.st{background:var(--stretch-soft);color:var(--stretch)}
+.hist{display:flex;flex-direction:column;gap:8px}
+.hdots{display:flex;gap:5px;flex-wrap:wrap}
+.hdot{width:22px;height:22px;border-radius:4px;background:var(--sunk);display:grid;place-items:center;font:500 10px var(--mono);color:var(--muted)}
+.hdot.on{background:var(--on);color:var(--surface)} .hdot.off{background:var(--off);color:var(--surface)}
+.hdot.lean-on{background:var(--on-soft);color:var(--on)} .hdot.lean-off{background:var(--off-soft);color:var(--off)}
+
+/* z board */
+.board{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:18px 20px;display:flex;flex-direction:column;gap:6px}
+.zrow{display:grid;grid-template-columns:132px minmax(0,1fr) 150px;gap:14px;align-items:center;min-height:36px}
+.zname{font-weight:600}
+.track{position:relative;height:28px}
+.track .axis{position:absolute;left:0;right:0;top:50%;height:1px;background:var(--rule)}
+.track .bandz{position:absolute;top:2px;bottom:2px;left:37.5%;width:25%;background:var(--band);border-radius:3px}
+.track .zero{position:absolute;top:0;bottom:0;left:50%;width:2px;margin-left:-1px;background:var(--ink2)}
+.track .stem{position:absolute;top:50%;height:3px;margin-top:-1.5px;background:var(--muted);border-radius:2px}
+.track .dot{position:absolute;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--muted);border:2px solid var(--surface);box-shadow:0 0 0 1px var(--muted)}
+.zrow.st .stem{background:var(--stretch)} .zrow.st .dot{background:var(--stretch);box-shadow:0 0 0 1px var(--stretch)}
+.zval{display:flex;flex-direction:column;line-height:1.25}
+.zval b{font:500 15px var(--mono)}
+.zval span{font-size:13px;color:var(--muted)}
+.ticks{display:grid;grid-template-columns:132px minmax(0,1fr) 150px;gap:14px}
+.tickrow{position:relative;height:18px;font:11px var(--mono);color:var(--muted)}
+.tickrow span{position:absolute;transform:translateX(-50%)}
+.boardnote{font-size:13px;color:var(--muted);margin-top:6px}
+
+/* cards */
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.card.err{border-style:dashed}
+.chead{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.cname{font-family:var(--display);font-size:19px;font-weight:600}
+.proxy{font:12px var(--mono);color:var(--muted)}
+.big{font:500 26px var(--mono);font-variant-numeric:tabular-nums;line-height:1.1}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;font-size:13px}
+.kv dt{color:var(--muted)} .kv dd{margin:0;font-family:var(--mono);text-align:right}
+.spark{width:100%;height:auto;display:block;touch-action:none}
+.spark .bandr{fill:var(--band)} .spark .avg{stroke:var(--muted);stroke-dasharray:3 3;stroke-width:1;fill:none}
+.spark .ln{stroke:var(--line);stroke-width:1.6;fill:none}
+.spark .end{fill:var(--stretch);stroke:var(--surface);stroke-width:2}
+.spark .cross{stroke:var(--muted);stroke-width:1}
+.spark .hov{fill:var(--ink);stroke:var(--surface);stroke-width:2}
+.readout{font:12px var(--mono);color:var(--muted);min-height:18px}
+.why{font-size:13px;color:var(--ink2)}
+.asof{font:11px var(--mono);color:var(--muted)}
+.errmsg{font-size:13px;color:var(--off)}
+.skel{height:60px;border-radius:6px;background:var(--sunk)}
+
+section{display:flex;flex-direction:column;gap:12px}
+.shead{display:flex;flex-direction:column;gap:4px}
+.shead p{color:var(--ink2);max-width:70ch}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+
+.method{font-size:13px;color:var(--ink2);border-top:1px solid var(--rule);padding-top:16px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 28px}
+.method b{color:var(--ink)}
+
+@media (max-width:900px){ .grid{grid-template-columns:repeat(2,minmax(0,1fr))} .grid4{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media (max-width:640px){
+  .grid,.grid4,.grid2,.method{grid-template-columns:minmax(0,1fr)}
+  .verdict{grid-template-columns:minmax(0,1fr)}
+  .zrow,.ticks{grid-template-columns:70px minmax(0,1fr) 92px;gap:8px}
+  .zval span{display:none}
+  .wrap{padding-inline:16px}
+  h1{font-size:26px}
+}
+@media (prefers-reduced-motion:no-preference){ .skel{animation:pulse 1.4s ease-in-out infinite} @keyframes pulse{50%{opacity:.55}} }
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header>
+    <div class="hgroup">
+      <span class="eyebrow">Situational awareness · 9 Indian market measures vs their own past year</span>
+      <h1>India Conditions Readout</h1>
+      <p class="muted" id="through">Loading…</p>
+    </div>
+    <div class="hmeta">
+      <span class="asof" id="fetched"></span>
+      <a class="navlink" href="./">Indian Market Today →</a>
+    </div>
+  </header>
+
+  <div class="banner" id="banner" hidden></div>
+
+  <div class="verdict" id="verdict">
+    <div>
+      <span class="eyebrow">Today's reading</span>
+      <div class="vtitle mixed" id="vtitle">Calculating…</div>
+      <p class="why" id="vtext">A pattern counts only when several stretched measures point the same way and hold it.</p>
+      <div class="tally" id="tally"></div>
+    </div>
+    <div class="hist">
+      <span class="eyebrow">Last 15 sessions, oldest to newest</span>
+      <div class="hdots" id="hdots"></div>
+      <p class="muted" style="font-size:13px">Solid = aligned (every stretched measure agrees). Pale = leaning (one dissent). Grey = mixed.</p>
+    </div>
+  </div>
+
+  <div class="board" id="board">
+    <span class="eyebrow">Z-score: standard deviations from each measure's own 252-day average</span>
+    <div id="zrows"></div>
+    <div class="ticks"><span></span><div class="tickrow" id="ticks"></div><span></span></div>
+    <p class="boardnote">Shaded band is ±1 sd, the ordinary range. Amber marks a measure outside it.</p>
+  </div>
+
+  <div class="grid" id="cards"></div>
+
+  <div class="method">
+    <p><b>Z-score.</b> (today − 252-day average) ÷ 252-day standard deviation. <b>20-day move.</b> Today ÷ value 20 sessions ago − 1.</p>
+    <p><b>Rates.</b> Realized volatility of the 10-year G-sec yield: standard deviation of the last 20 daily changes in basis points × √252, from TVC:IN10Y. The card also shows the yield itself.</p>
+    <p><b>Crude in ₹.</b> Brent (TVC:UKOIL) × USD/INR, in rupees per barrel. It captures oil and currency pressure on India in one number.</p>
+    <p><b>Aligned.</b> At least three measures outside ±1 sd and all of them tilt the same way. <b>Leaning.</b> Four or more stretched with one dissent. The two breadth measures and the two VIX measures overlap, so a pair moving together counts twice.</p>
+    <p>All data from TradingView, saved after each Indian trading session. US-traded inputs (Brent, US VIX) can settle overnight and are corrected on the next update. This describes conditions only. It is not investment advice or a reason to buy or sell anything.</p>
+  </div>
+</div>
+
+<script>
+(() => {
+const DATA = /*__DATA__*/null;
+const UPDATED = "/*__UPDATED__*/";
+const $ = id => document.getElementById(id);
+const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const fdate = k => { const [y,m,d] = k.split("-"); return `${+d} ${MON[+m-1]} ${y}`; };
+const mean = a => a.reduce((s,x)=>s+x,0)/a.length;
+const pstd = a => { const m = mean(a); return Math.sqrt(a.reduce((s,x)=>s+(x-m)*(x-m),0)/a.length); };
+const sgn = (x,d=1) => (x>=0?"+":"−") + Math.abs(x).toFixed(d);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ---------- data access ---------- */
+async function bars(symbol) {
+  const rows = DATA && DATA[symbol];
+  if (!rows || !rows.length) throw { code: "no_data", message: `No saved data for ${symbol}` };
+  return { bars: rows.map(([d, c]) => ({ d, c })) };
+}
+const series = b => b.map(x => ({ d: x.d, v: x.c })).filter(x => Number.isFinite(x.v));
+function combine(a, b, op) {
+  const mb = new Map(b.map(x => [x.d, x.v]));
+  return a.filter(x => mb.has(x.d) && mb.get(x.d)).map(x => ({ d: x.d, v: op === "mul" ? x.v * mb.get(x.d) : x.v / mb.get(x.d) }));
+}
+function zAt(vals, i, L=252) {
+  if (i < L-1) return null;
+  const w = vals.slice(i-L+1, i+1); const s = pstd(w);
+  return s ? (vals[i]-mean(w))/s : null;
+}
+
+function errText(e) {
+  return "This reading is missing from the saved data" + (e && e.message ? ": " + e.message : ".");
+}
+
+/* ---------- measures ---------- */
+const MEASURES = [
+  { key:"b50", name:"Breadth 50", proxy:"Nifty 50 EW ÷ Nifty 50", syms:["NSE:NIFTY50EQUALWEIGHT","NSE:NIFTY"], riskSign:+1, dp:4,
+    why:"Equal-weight vs cap-weight Nifty 50. Falling means a few heavyweights are carrying the index.",
+    chip:z=> z<=-1?"Narrowing":z>=1?"Broadening":"Normal" },
+  { key:"b500", name:"Breadth 500", proxy:"Nifty 500 EW ÷ Nifty 500", syms:["NSE:NIFTY500_EW","NSE:CNX500"], riskSign:+1, dp:4,
+    why:"The typical listed company vs the market-cap-weighted Nifty 500, including mid and small caps.",
+    chip:z=> z<=-1?"Narrowing":z>=1?"Broadening":"Normal" },
+  { key:"inr", name:"Rupee", proxy:"USD/INR", syms:["FX_IDC:USDINR"], riskSign:-1, dp:2,
+    why:"Rupees per dollar. Rising means the rupee is weakening, usually alongside foreign outflows. The RBI smooths moves, so small changes stand out.",
+    chip:z=> z>=1?"Rupee weak":z<=-1?"Rupee strong":"Normal" },
+  { key:"rates", name:"Rates", proxy:"10Y G-sec yield vol", syms:["TVC:IN10Y"], riskSign:-1, dp:0, unit:" bp/yr",
+    why:"Realized volatility of the 10-year G-sec yield. Indian yields are usually calm, so a jump here is rare.",
+    chip:z=> z>=1?"Unsettled":z<=-1?"Unusually calm":"Normal" },
+  { key:"ivix", name:"India VIX", proxy:"NSE India VIX", syms:["NSE:INDIAVIX"], riskSign:-1, dp:2,
+    why:"Expected Nifty volatility over the next 30 days, from option prices.",
+    chip:z=> z>=1?"Fear rising":z<=-1?"Unusually calm":"Normal" },
+  { key:"rvix", name:"India vs US fear", proxy:"India VIX ÷ VIX", syms:["NSE:INDIAVIX","TVC:VIX"], riskSign:-1, dp:3,
+    why:"Rising means fear is building in India faster than in the US, so the worry is local rather than global.",
+    chip:z=> z>=1?"India-specific fear":z<=-1?"India calmer than US":"Normal" },
+  { key:"cyc", name:"Growth", proxy:"Nifty Metal ÷ Nifty FMCG", syms:["NSE:CNXMETAL","NSE:CNXFMCG"], riskSign:+1, dp:4,
+    why:"Cyclicals vs defensives. Rising means investors are pricing stronger Indian growth.",
+    chip:z=> z>=1?"Growth leaning":z<=-1?"Defensive leaning":"Normal" },
+  { key:"fin", name:"Financials", proxy:"Nifty Fin Services ÷ Nifty 50", syms:["NSE:CNXFINANCE","NSE:NIFTY"], riskSign:+1, dp:4,
+    why:"Lenders vs the market. With no junk-bond market in India, lender stocks are the best listed read on credit.",
+    chip:z=> z>=1?"Lenders leading":z<=-1?"Lenders lagging":"Normal" },
+  { key:"crude", name:"Crude in ₹", proxy:"Brent × USD/INR", syms:["TVC:UKOIL","FX_IDC:USDINR"], op:"mul", riskSign:-1, dp:0, prefix:"₹",
+    why:"India imports most of its oil. Rising crude in rupees pressures inflation, the fiscal deficit and the rupee at once.",
+    chip:z=> z>=1?"Import pressure":z<=-1?"Relief":"Normal" },
+];
+
+async function loadMeasure(m) {
+  const res = await Promise.all(m.syms.map(s => bars(s)));
+  let s;
+  if (m.key === "rates") {
+    const y = series(res[0].bars);
+    const ch = y.slice(1).map((x,i) => (x.v - y[i].v) * 100);
+    s = [];
+    for (let i = 19; i < ch.length; i++) s.push({ d: y[i+1].d, v: pstd(ch.slice(i-19, i+1)) * Math.sqrt(252) });
+  } else if (m.syms.length === 2) s = combine(series(res[0].bars), series(res[1].bars), m.op);
+  else s = series(res[0].bars);
+  const vals = s.map(x => x.v), n = vals.length;
+  const zs = vals.map((_, i) => zAt(vals, i));
+  const w = vals.slice(-252);
+  return {
+    s, vals, zs, z: zs[n-1], v: vals[n-1], d: s[n-1].d,
+    move: n > 20 ? (vals[n-1]/vals[n-21] - 1) * 100 : null,
+    avg: mean(w), sd: pstd(w),
+    yieldNow: m.key === "rates" ? series(res[0].bars).at(-1).v : null,
+  };
+}
+
+/* ---------- rendering helpers ---------- */
+const fmtV = (m, v) => (m.prefix || "") + (m.dp === 0 ? Math.round(v).toLocaleString("en-IN") : v.toFixed(m.dp)) + (m.unit || "");
+function tilt(m, z) { if (z == null || Math.abs(z) < 1) return 0; return Math.sign(z) * m.riskSign; }
+
+function spark(pts, opt) {
+  // pts: [{d,v}]; opt: {avg, sd, fmt}
+  const W = 320, H = 84, P = 4;
+  const vs = pts.map(p => p.v);
+  let lo = Math.min(...vs), hi = Math.max(...vs);
+  if (opt.avg != null) { lo = Math.min(lo, opt.avg - opt.sd); hi = Math.max(hi, opt.avg + opt.sd); }
+  const pad = (hi - lo) * 0.08 || 1; lo -= pad; hi += pad;
+  const x = i => P + i * (W - 2*P) / Math.max(1, pts.length - 1);
+  const y = v => H - P - (v - lo) * (H - 2*P) / (hi - lo);
+  const path = pts.map((p,i) => (i?"L":"M") + x(i).toFixed(1) + " " + y(p.v).toFixed(1)).join("");
+  let band = "";
+  if (opt.avg != null) {
+    band = `<rect class="bandr" x="${P}" width="${W-2*P}" y="${y(opt.avg+opt.sd).toFixed(1)}" height="${(y(opt.avg-opt.sd)-y(opt.avg+opt.sd)).toFixed(1)}"/>
+            <line class="avg" x1="${P}" x2="${W-P}" y1="${y(opt.avg).toFixed(1)}" y2="${y(opt.avg).toFixed(1)}"/>`;
+  }
+  const li = pts.length - 1;
+  const svg = `<svg class="spark" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opt.label||"trend")}">
+    ${band}<path class="ln" d="${path}"/>
+    <line class="cross" x1="0" x2="0" y1="${P}" y2="${H-P}" visibility="hidden"/>
+    <circle class="hov" r="3.5" cx="0" cy="0" visibility="hidden"/>
+    <circle class="end" r="4.5" cx="${x(li).toFixed(1)}" cy="${y(pts[li].v).toFixed(1)}"/>
+    <rect x="0" y="0" width="${W}" height="${H}" fill="transparent"/></svg>`;
+  return { svg, x, y, W };
+}
+function wireSpark(el, pts, sp, fmt, readout, rest) {
+  const svg = el.querySelector("svg.spark"); if (!svg) return;
+  const cross = svg.querySelector(".cross"), hov = svg.querySelector(".hov");
+  const move = ev => {
+    const r = svg.getBoundingClientRect();
+    const fx = (ev.clientX - r.left) / r.width * sp.W;
+    let i = Math.round((fx - 4) / ((sp.W - 8) / Math.max(1, pts.length - 1)));
+    i = Math.max(0, Math.min(pts.length - 1, i));
+    const cx = sp.x(i), cy = sp.y(pts[i].v);
+    cross.setAttribute("x1", cx); cross.setAttribute("x2", cx); cross.setAttribute("visibility","visible");
+    hov.setAttribute("cx", cx); hov.setAttribute("cy", cy); hov.setAttribute("visibility","visible");
+    readout.textContent = `${fdate(pts[i].d)} · ${fmt(pts[i].v)}`;
+  };
+  const leave = () => { cross.setAttribute("visibility","hidden"); hov.setAttribute("visibility","hidden"); readout.textContent = rest; };
+  svg.addEventListener("pointermove", move); svg.addEventListener("pointerdown", move);
+  svg.addEventListener("pointerleave", leave);
+  readout.textContent = rest;
+}
+
+function skeletonCards() {
+  $("cards").innerHTML = MEASURES.map(m => `<div class="card" id="c-${m.key}">
+    <div class="chead"><span class="cname">${m.name}</span><span class="proxy">${m.proxy}</span></div>
+    <div class="skel"></div></div>`).join("");
+  const t = $("ticks"); t.innerHTML = [-4,-3,-2,-1,0,1,2,3,4].map(v => `<span style="left:${(v+4)/8*100}%">${v>0?"+"+v:v}</span>`).join("");
+}
+
+function renderCard(m, r) {
+  const el = $("c-" + m.key);
+  const st = r.z != null && Math.abs(r.z) >= 1;
+  const tl = tilt(m, r.z);
+  const pts = r.s.slice(-252);
+  const sp = spark(pts, { avg: r.avg, sd: r.sd, label: `${m.name} over the past year` });
+  el.className = "card";
+  el.innerHTML = `
+    <div class="chead"><span class="cname">${m.name}</span><span class="proxy">${m.proxy}</span></div>
+    <div class="chead"><span class="big">${fmtV(m, r.v)}</span>
+      <span class="pill ${tl>0?"on":tl<0?"off":""}">${m.chip(r.z ?? 0, r.v)}</span></div>
+    <dl class="kv">
+      <dt>Z-score</dt><dd style="color:${st?"var(--stretch)":"inherit"}">${r.z==null?"—":sgn(r.z)+" sd"}</dd>
+      <dt>20-day move</dt><dd>${r.move==null?"—":sgn(r.move)+"%"}</dd>
+      <dt>1-yr average</dt><dd>${fmtV(m, r.avg)}</dd>
+      ${r.yieldNow != null ? `<dt>10Y yield</dt><dd>${r.yieldNow.toFixed(2)}%</dd>` : ""}
+    </dl>
+    ${sp.svg}
+    <div class="readout"></div>
+    <p class="why">${m.why}</p>`;
+  wireSpark(el, pts, sp, v => fmtV(m, v), el.querySelector(".readout"), `Past year · as of ${fdate(r.d)}`);
+}
+function renderCardError(m, e) {
+  const el = $("c-" + m.key); el.className = "card err";
+  el.innerHTML = `<div class="chead"><span class="cname">${m.name}</span><span class="proxy">${m.proxy}</span></div><p class="errmsg">${esc(errText(e))}</p>`;
+}
+
+function renderBoard(results) {
+  $("zrows").innerHTML = MEASURES.map(m => {
+    const r = results[m.key];
+    if (!r || r.err) return `<div class="zrow"><span class="zname">${m.name}</span><div class="track"><div class="axis"></div><div class="bandz"></div><div class="zero"></div></div><div class="zval"><b>—</b><span>unavailable</span></div></div>`;
+    const z = Math.max(-4, Math.min(4, r.z ?? 0));
+    const pos = (z + 4) / 8 * 100, st = Math.abs(r.z) >= 1;
+    const left = Math.min(pos, 50), width = Math.abs(pos - 50);
+    return `<div class="zrow ${st?"st":""}" title="${m.name}: ${sgn(r.z)} sd (${fmtV(m,r.v)})">
+      <span class="zname">${m.name}</span>
+      <div class="track"><div class="axis"></div><div class="bandz"></div>
+        <div class="stem" style="left:${left}%;width:${width}%"></div><div class="zero"></div>
+        <div class="dot" style="left:${pos}%"></div></div>
+      <div class="zval"><b>${sgn(r.z)} sd</b><span>${m.chip(r.z, r.v)}</span></div></div>`;
+  }).join("");
+}
+
+function classify(tilts) {
+  const st = tilts.filter(t => t !== 0), on = st.filter(t => t > 0).length, off = st.length - on;
+  if (st.length >= 3 && (on === 0 || off === 0)) return { k: off ? "off" : "on", on, off, n: st.length };
+  if (st.length >= 4 && Math.min(on, off) === 1) return { k: on > off ? "lean-on" : "lean-off", on, off, n: st.length };
+  return { k: "mixed", on, off, n: st.length };
+}
+function renderVerdict(results) {
+  const ok = MEASURES.filter(m => results[m.key] && !results[m.key].err);
+  if (ok.length < 4) { $("vtitle").textContent = "Not enough data"; $("vtext").textContent = "Fewer than four measures loaded, so no reading is given."; return; }
+  const c = classify(ok.map(m => tilt(m, results[m.key].z)));
+  const T = { off:"Aligned: risk-off", on:"Aligned: risk-on", "lean-off":"Leaning risk-off", "lean-on":"Leaning risk-on", mixed:"Mixed: noise, not signal" };
+  const vt = $("vtitle"); vt.textContent = T[c.k];
+  vt.className = "vtitle " + (c.k.includes("off") ? "off" : c.k.includes("on") ? "on" : "mixed");
+  $("vtext").textContent = c.k === "mixed"
+    ? `${c.n} of ${ok.length} measures are stretched, but they pull against each other (${c.on} risk-on, ${c.off} risk-off).`
+    : `${c.n} of ${ok.length} measures are stretched, ${c.on} tilting risk-on and ${c.off} risk-off. Watch whether it holds.`;
+  $("tally").innerHTML = ok.map(m => { const t = tilt(m, results[m.key].z);
+    return `<span class="pill ${t>0?"on":t<0?"off":""}">${m.name} ${t>0?"▲ on":t<0?"▼ off":"· normal"}</span>`; }).join("");
+  const days = 15, dots = [];
+  for (let k = days - 1; k >= 0; k--) {
+    const tl = ok.map(m => { const r = results[m.key]; return tilt(m, r.zs[r.zs.length - 1 - k]); });
+    const cc = classify(tl);
+    const ref = results[ok[0].key].s; const d = ref[ref.length - 1 - k];
+    dots.push(`<span class="hdot ${cc.k==="mixed"?"":cc.k}" title="${d?fdate(d.d):""}: ${T[cc.k]}">${cc.n}</span>`);
+  }
+  $("hdots").innerHTML = dots.join("");
+}
+
+/* ---------- credit & funding ---------- */
+function statCard(el, o) {
+  el.className = "card";
+  el.innerHTML = `<div class="chead"><span class="cname">${o.name}</span><span class="proxy">${o.proxy}</span></div>
+    <span class="big">${o.big}</span>
+    <dl class="kv">${o.kv.map(([k,v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>
+    ${o.sp ? o.sp.svg + '<div class="readout"></div>' : ""}
+    <p class="why">${o.why}</p>`;
+  if (o.sp) wireSpark(el, o.pts, o.sp, o.fmt, el.querySelector(".readout"), o.rest);
+}
+function errCard(el, name, e) { el.className = "card err"; el.innerHTML = `<div class="chead"><span class="cname">${name}</span></div><p class="errmsg">${esc(errText(e))}</p>`; }
+const pctFmt = v => v.toFixed(2) + "%";
+const bpChg = (s, n) => s.length > n ? sgn((s[s.length-1].v - s[s.length-1-n].v) * 100, 0) + " bp" : "—";
+
+/* ---------- orchestration ---------- */
+let busy = false;
+async function run() {
+  if (busy) return; busy = true;
+  $("banner").hidden = true;
+  const results = {}, errs = [];
+  await Promise.all([
+    ...MEASURES.map(async m => {
+      try { const r = await loadMeasure(m); results[m.key] = r; renderCard(m, r); }
+      catch (e) { results[m.key] = { err: e }; errs.push(e); renderCardError(m, e); }
+    }),
+  ]);
+  renderBoard(results); renderVerdict(results);
+  const ok = MEASURES.map(m => results[m.key]).filter(r => r && !r.err);
+  if (ok.length) {
+    const latest = ok.map(r => r.d).sort().at(-1);
+    $("through").textContent = `Market data through ${fdate(latest)}`;
+    $("fetched").textContent = UPDATED ? "Updated " + UPDATED : "";
+  } else $("through").textContent = "No market data loaded.";
+  if (errs.length && errs.length >= 8 && errs.every(e => e && e.code === errs[0].code)) {
+    $("banner").textContent = errText(errs[0]); $("banner").hidden = false;
+  }
+  busy = false;
+}
+
+skeletonCards();
+run();
+})();
+</script>
+
+</body>
+</html>
