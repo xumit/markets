@@ -1,0 +1,20 @@
+NSE reachability probe
+run at 2026-10-14 15:38 UTC  (runner: 172.171.102.161)
+
+homepage (to collect a cookie): HTTP 403
+cookies collected: 1
+
+PR141026  HTTP 200  652452 bytes  VALID ZIP, 14 members
+    https://nsearchives.nseindia.com/archives/equities/bhavcopy/pr/PR141026.zip
+PR141026  HTTP 000  0 bytes  -
+    https://www1.nseindia.com/archives/equities/bhavcopy/pr/PR141026.zip
+PR141026  HTTP 200  652452 bytes  VALID ZIP, 14 members
+    https://nsearchives.nseindia.com/archives/equities/bhavcopy/pr/PR141026.zip
+PR141026  HTTP 000  0 bytes  -
+    https://www1.nseindia.com/archives/equities/bhavcopy/pr/PR141026.zip
+PR131026  HTTP 200  653025 bytes  VALID ZIP, 14 members
+    https://nsearchives.nseindia.com/archives/equities/bhavcopy/pr/PR131026.zip
+PR131026  HTTP 000  0 bytes  -
+    https://www1.nseindia.com/archives/equities/bhavcopy/pr/PR131026.zip
+
+A line reading VALID ZIP means the daily fetch can be automated.
