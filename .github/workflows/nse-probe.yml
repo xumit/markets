@@ -1,0 +1,85 @@
+name: NSE reachability probe
+
+# A one-off diagnostic, not part of the site build. It answers a single
+# question that cannot be answered from Claude's workspace, whose egress is
+# limited to GitHub and the package registries: will NSE's archive server
+# hand a bhavcopy to an automated request from a GitHub runner?
+#
+# It writes what it found to nse-probe-result.txt and commits it, because the
+# Actions log API is not reachable from the session that needs the answer.
+#
+# Delete this workflow and the result file once the question is settled.
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/nse-probe.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Try to fetch a bhavcopy
+        run: |
+          set +e
+          UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0 Safari/537.36'
+          JAR=$(mktemp)
+          OUT=nse-probe-result.txt
+          : > "$OUT"
+
+          say() { echo "$1" | tee -a "$OUT"; }
+
+          say "NSE reachability probe"
+          say "run at $(date -u '+%Y-%m-%d %H:%M UTC')  (runner: $(curl -s --max-time 5 https://api.ipify.org || echo 'ip unknown'))"
+          say ""
+
+          # NSE hands out a session cookie on the homepage and checks for it on
+          # the archive paths, so the jar is primed first.
+          code=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 30 \
+                 -c "$JAR" -H "User-Agent: $UA" \
+                 -H 'Accept-Language: en-GB,en;q=0.9' \
+                 'https://www.nseindia.com/' )
+          say "homepage (to collect a cookie): HTTP $code"
+          say "cookies collected: $(grep -vc '^#' "$JAR" 2>/dev/null || echo 0)"
+          say ""
+
+          # Two dates: today, and a Tuesday known to be a trading day, in case
+          # today's file is not published yet when this runs.
+          for D in $(date -u '+%d%m%y') 141026 131026; do
+            for U in \
+              "https://nsearchives.nseindia.com/archives/equities/bhavcopy/pr/PR${D}.zip" \
+              "https://www1.nseindia.com/archives/equities/bhavcopy/pr/PR${D}.zip" ; do
+              r=$(curl -sS -o /tmp/pr.zip -w '%{http_code} %{size_download}' --max-time 60 \
+                  -b "$JAR" -c "$JAR" -H "User-Agent: $UA" \
+                  -H 'Accept: */*' -H 'Referer: https://www.nseindia.com/all-reports' \
+                  "$U")
+              set -- $r
+              status=$1; size=$2
+              kind='-'
+              if [ "$status" = "200" ] && [ "${size:-0}" -gt 100000 ]; then
+                if unzip -l /tmp/pr.zip >/dev/null 2>&1; then
+                  kind="VALID ZIP, $(unzip -l /tmp/pr.zip | grep -c 'csv\|txt') members"
+                else
+                  kind='200 but not a zip'
+                fi
+              fi
+              say "PR${D}  HTTP $status  ${size} bytes  $kind"
+              say "    $U"
+            done
+          done
+          say ""
+          say "A line reading VALID ZIP means the daily fetch can be automated."
+
+      - name: Commit the result
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add nse-probe-result.txt
+          git commit -m "NSE probe result" || exit 0
+          git push
