@@ -11,6 +11,11 @@ Public dashboards for Indian equities, built from the daily NSE bhavcopy.
   Built from TradingView daily closes kept in `india-conditions/history.json`;
   `india-conditions/build.py` merges each session's new bars and regenerates the page.
 
+- `us-conditions.html` — **US Conditions Readout** (tools.xumitcapital.com/us-conditions.html):
+  six systemic US measures (breadth, credit, copper vs gold, dollar, VIX term structure,
+  10-year Treasury yield volatility) scored against their own past year, plus credit
+  spreads and funding plumbing. Built by `us-conditions/build.py` from
+  `us-conditions/history.json`, the same way as the India page.
 - `index.html` — a fixed redirect to `indian-market-today/`. Do not overwrite it.
 
 The page is self-contained: all data for the as-of date is embedded, so there is
