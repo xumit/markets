@@ -3,12 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>India Conditions Readout</title>
+<title>India Conditions Readout | Xumit Capital</title>
 <meta name="description" content="Nine Indian market measures — breadth, rupee, G-sec volatility, India VIX, growth, financials and crude in rupees — each scored against its own past year.">
-<meta property="og:title" content="India Conditions Readout">
+<meta property="og:title" content="India Conditions Readout | Xumit Capital">
+<meta property="og:site_name" content="Xumit Capital">
+<meta property="og:image" content="https://xumitcapital.com/wp-content/uploads/2026/10/cropped-1-1024x411.jpg">
 <meta property="og:description" content="Nine Indian market measures — breadth, rupee, G-sec volatility, India VIX, growth, financials and crude in rupees — each scored against its own past year.">
 <meta property="og:type" content="website">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='14' font-size='14'>&#128200;</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23202A35'/><text x='16' y='22' text-anchor='middle' font-family='Montserrat,Arial,sans-serif' font-weight='800' font-size='15' fill='%23D89B2B'>XC</text></svg>">
 <style>
   html{-webkit-text-size-adjust:100%}
   :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -19,30 +21,31 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
 :root{
-  --ground:#EDF0F3; --surface:#FFFFFF; --sunk:#E3E8ED; --ink:#16202B; --ink2:#3C4A57; --muted:#667482;
-  --rule:#D3DAE1; --band:#DCE2E8; --stretch:#B06A00; --stretch-soft:#F6E7CF;
-  --on:#1C7466; --on-soft:#D6EDE8; --off:#AE4330; --off-soft:#F5DDD7; --line:#2A3A4A;
-  --display:"Barlow Semi Condensed","Arial Narrow",Arial,sans-serif;
+  --ground:#F5F7FA; --surface:#FFFFFF; --sunk:#EDF2F7; --ink:#1A202C; --ink2:#2D3748; --muted:#5F6B7A;
+  --rule:#E2E8F0; --band:#E9EEF4; --stretch:#D89B2B; --stretch-ink:#9A6A0E; --stretch-soft:#FAF0D6;
+  --on:#1C7466; --on-soft:#D6EDE8; --off:#B23A2B; --off-soft:#F8DED9; --line:#202A35;
+  --brand-navy:#202A35; --brand-gold:#D89B2B; --brand-blue:#185ADB; --brand-mist:#BFC9D4; --link:#185ADB;
+  --display:"Montserrat","Segoe UI",Arial,sans-serif;
   --body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
   --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){color-scheme:dark;
-    --ground:#0E141A; --surface:#151D25; --sunk:#1C2630; --ink:#E4EAF0; --ink2:#BFC9D3; --muted:#8E9CAA;
-    --rule:#2A3643; --band:#233040; --stretch:#E3A13A; --stretch-soft:#3A2C14;
-    --on:#4DB3A2; --on-soft:#15332E; --off:#E27B66; --off-soft:#3C1F19; --line:#C9D4DE;}
+    --ground:#141B23; --surface:#1B2430; --sunk:#232E3B; --ink:#E6EBF1; --ink2:#C4CDD7; --muted:#93A0AE;
+    --rule:#2C3846; --band:#283442; --stretch:#E3A83E; --stretch-ink:#EDBB5C; --stretch-soft:#3A2E16;
+    --on:#4DB3A2; --on-soft:#15332E; --off:#E27B66; --off-soft:#3C1F19; --line:#D6DEE7; --link:#6E9BF5;}
 }
 :root[data-theme="dark"]{color-scheme:dark;
-  --ground:#0E141A; --surface:#151D25; --sunk:#1C2630; --ink:#E4EAF0; --ink2:#BFC9D3; --muted:#8E9CAA;
-  --rule:#2A3643; --band:#233040; --stretch:#E3A13A; --stretch-soft:#3A2C14;
-  --on:#4DB3A2; --on-soft:#15332E; --off:#E27B66; --off-soft:#3C1F19; --line:#C9D4DE;}
+  --ground:#141B23; --surface:#1B2430; --sunk:#232E3B; --ink:#E6EBF1; --ink2:#C4CDD7; --muted:#93A0AE;
+    --rule:#2C3846; --band:#283442; --stretch:#E3A83E; --stretch-ink:#EDBB5C; --stretch-soft:#3A2E16;
+    --on:#4DB3A2; --on-soft:#15332E; --off:#E27B66; --off-soft:#3C1F19; --line:#D6DEE7; --link:#6E9BF5;}
 
 body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
 .wrap{max-width:1120px;margin:0 auto;padding-inline:20px;padding-block:24px 48px;display:flex;flex-direction:column;gap:28px}
-h1,h2{font-family:var(--display);font-weight:600;letter-spacing:.01em;text-wrap:balance;margin:0}
+h1,h2{font-family:var(--display);font-weight:700;letter-spacing:0;text-wrap:balance;margin:0}
 h1{font-size:30px;line-height:1.1}
 h2{font-size:20px}
 .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
@@ -50,27 +53,45 @@ h2{font-size:20px}
 p{margin:0}
 .muted{color:var(--muted)}
 
+.brandbar{background:var(--brand-navy);color:#fff;padding-inline:20px;padding-block:18px 30px}
+.brandbar .inner{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+.brandtop{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.logo{display:block;line-height:0}
+.logo img{height:64px;width:auto;display:block}
+.brandtop .site{font:600 13px var(--display);color:var(--brand-mist);text-decoration:none}
+.brandtop .site:hover{color:var(--brand-gold)}
 header{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between}
-.hgroup{display:flex;flex-direction:column;gap:6px}
+.hgroup{display:flex;flex-direction:column;gap:8px}
+.hgroup::before{content:"";width:48px;height:3px;background:var(--brand-gold);border-radius:2px;margin-bottom:6px}
+.brandbar .eyebrow{color:var(--brand-mist)}
+.brandbar h1{color:#fff;font-weight:800;font-size:34px}
+.brandbar h1 span{color:var(--brand-gold)}
+.brandbar #through{color:var(--brand-mist)}
 .hmeta{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.navlink{font:600 14px var(--body);color:var(--ink);text-decoration:none;border:1px solid var(--rule);border-radius:6px;padding:8px 14px;background:var(--surface)}
-.navlink:hover{border-color:var(--muted)}
-.navlink:focus-visible{outline:2px solid var(--stretch);outline-offset:2px}
+.brandbar .asof{color:var(--brand-mist)}
+.brandfoot{background:var(--brand-navy);color:var(--brand-mist);padding-inline:20px;padding-block:22px}
+.brandfoot .inner{max-width:1120px;margin:0 auto;display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;font-size:13px}
+.brandfoot b{font-family:var(--display);color:#fff;font-weight:700;letter-spacing:.04em}
+.brandfoot a{color:var(--brand-gold);text-decoration:none;font-weight:600}
+.brandfoot a:hover{text-decoration:underline}
+.navlink{font:600 13px var(--display);color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.4);border-radius:7px;padding:9px 16px;white-space:nowrap}
+.navlink:hover{border-color:var(--brand-gold);color:var(--brand-gold)}
+.navlink:focus-visible{outline:2px solid var(--brand-gold);outline-offset:2px}
 button{font:600 14px var(--body);color:var(--ink);background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:8px 14px;cursor:pointer}
 button:hover{border-color:var(--muted)}
-button:focus-visible{outline:2px solid var(--stretch);outline-offset:2px}
+button:focus-visible{outline:2px solid var(--link);outline-offset:2px}
 button[disabled]{opacity:.6;cursor:progress}
 
 .banner{border:1px solid var(--off);background:var(--off-soft);border-radius:8px;padding:12px 16px}
 
 /* verdict */
 .verdict{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:18px 20px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px}
-.vtitle{font-family:var(--display);font-size:26px;font-weight:600;line-height:1.15}
+.vtitle{font-family:var(--display);font-size:24px;font-weight:700;line-height:1.15}
 .vtitle.mixed{color:var(--ink)} .vtitle.off{color:var(--off)} .vtitle.on{color:var(--on)}
 .tally{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .pill{display:inline-flex;align-items:center;gap:6px;font:500 12px var(--mono);padding:3px 9px;border-radius:999px;background:var(--sunk);color:var(--ink2);white-space:nowrap}
 .pill.on{background:var(--on-soft);color:var(--on)} .pill.off{background:var(--off-soft);color:var(--off)}
-.pill.st{background:var(--stretch-soft);color:var(--stretch)}
+.pill.st{background:var(--stretch-soft);color:var(--stretch-ink)}
 .hist{display:flex;flex-direction:column;gap:8px}
 .hdots{display:flex;gap:5px;flex-wrap:wrap}
 .hdot{width:22px;height:22px;border-radius:4px;background:var(--sunk);display:grid;place-items:center;font:500 10px var(--mono);color:var(--muted)}
@@ -134,7 +155,9 @@ section{display:flex;flex-direction:column;gap:12px}
   .zrow,.ticks{grid-template-columns:70px minmax(0,1fr) 92px;gap:8px}
   .zval span{display:none}
   .wrap{padding-inline:16px}
-  h1{font-size:26px}
+  .brandbar,.brandfoot{padding-inline:16px}
+  .brandbar h1{font-size:27px}
+  .logo img{height:52px}
 }
 @media (prefers-reduced-motion:no-preference){ .skel{animation:pulse 1.4s ease-in-out infinite} @keyframes pulse{50%{opacity:.55}} }
 </style>
@@ -142,19 +165,27 @@ section{display:flex;flex-direction:column;gap:12px}
 <body>
 
 
-<div class="wrap">
-  <header>
-    <div class="hgroup">
-      <span class="eyebrow">Situational awareness · 9 Indian market measures vs their own past year</span>
-      <h1>India Conditions Readout</h1>
-      <p class="muted" id="through">Loading…</p>
+<div class="brandbar">
+  <div class="inner">
+    <div class="brandtop">
+      <a class="logo" href="https://xumitcapital.com/" aria-label="Xumit Capital home"><img src="https://xumitcapital.com/wp-content/uploads/2026/10/cropped-1-1024x411.jpg" alt="Xumit Capital" width="160" height="64"></a>
+      <a class="site" href="https://xumitcapital.com/">xumitcapital.com</a>
     </div>
-    <div class="hmeta">
-      <span class="asof" id="fetched"></span>
-      <a class="navlink" href="./">Indian Market Today →</a>
-    </div>
-  </header>
+    <header>
+      <div class="hgroup">
+        <span class="eyebrow">Situational awareness · 9 Indian market measures vs their own past year</span>
+        <h1>India Conditions <span>Readout</span></h1>
+        <p id="through">Loading…</p>
+      </div>
+      <div class="hmeta">
+        <span class="asof" id="fetched"></span>
+        <a class="navlink" href="./">Indian Market Today →</a>
+      </div>
+    </header>
+  </div>
+</div>
 
+<div class="wrap">
   <div class="banner" id="banner" hidden></div>
 
   <div class="verdict" id="verdict">
@@ -188,6 +219,13 @@ section{display:flex;flex-direction:column;gap:12px}
     <p>All data from TradingView, saved after each Indian trading session. US-traded inputs (Brent, US VIX) can settle overnight and are corrected on the next update. This describes conditions only. It is not investment advice or a reason to buy or sell anything.</p>
   </div>
 </div>
+
+<footer class="brandfoot">
+  <div class="inner">
+    <span><b>XUMIT CAPITAL</b> &nbsp;·&nbsp; Portfolio advisory, global residency and international structuring</span>
+    <a href="https://xumitcapital.com/">xumitcapital.com →</a>
+  </div>
+</footer>
 
 <script>
 (() => {
@@ -340,7 +378,7 @@ function renderCard(m, r) {
     <div class="chead"><span class="big">${fmtV(m, r.v)}</span>
       <span class="pill ${tl>0?"on":tl<0?"off":""}">${m.chip(r.z ?? 0, r.v)}</span></div>
     <dl class="kv">
-      <dt>Z-score</dt><dd style="color:${st?"var(--stretch)":"inherit"}">${r.z==null?"—":sgn(r.z)+" sd"}</dd>
+      <dt>Z-score</dt><dd style="color:${st?"var(--stretch-ink)":"inherit"}">${r.z==null?"—":sgn(r.z)+" sd"}</dd>
       <dt>20-day move</dt><dd>${r.move==null?"—":sgn(r.move)+"%"}</dd>
       <dt>1-yr average</dt><dd>${fmtV(m, r.avg)}</dd>
       ${r.yieldNow != null ? `<dt>10Y yield</dt><dd>${r.yieldNow.toFixed(2)}%</dd>` : ""}
