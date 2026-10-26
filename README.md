@@ -11,6 +11,10 @@ Public dashboards for Indian equities, built from the daily NSE bhavcopy.
   Built from TradingView daily closes kept in `india-conditions/history.json`;
   `india-conditions/build.py` merges each session's new bars and regenerates the page.
 
+- `india-breadth/index.html` — **India Breadth Monitor** (tools.xumitcapital.com/india-breadth/):
+  daily Nifty 500 advance/decline and moving-average breadth, and the distribution of
+  returns and drawdowns across liquid NSE stocks. Built in `xumit/markets-data` with the
+  evening update.
 - `us-conditions.html` — **US Conditions Readout** (tools.xumitcapital.com/us-conditions.html):
   six systemic US measures (breadth, credit, copper vs gold, dollar, VIX term structure,
   10-year Treasury yield volatility) scored against their own past year, plus credit
