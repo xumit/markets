@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Indian Market Today</title>
+<title>Indian Market Today | Xumit Capital</title>
 <meta name="description" content="NSE index levels, factor spreads, market breadth, bullish percent indexes and new highs and lows, rebuilt from each day's bhavcopy.">
 <meta name="robots" content="index,follow">
-<meta property="og:title" content="Indian Market Today">
+<meta property="og:title" content="Indian Market Today | Xumit Capital">
 <meta property="og:description" content="NSE index levels, factor spreads, market breadth, bullish percent indexes and new highs and lows, rebuilt from each day's bhavcopy.">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23202A35'/><text x='16' y='22' text-anchor='middle' font-family='Montserrat,Arial,sans-serif' font-weight='800' font-size='15' fill='%23D89B2B'>XC</text></svg>">
@@ -18,65 +18,86 @@
 </style>
 </head>
 <body>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23202A35'/><text x='16' y='22' text-anchor='middle' font-family='Montserrat,Arial,sans-serif' font-weight='800' font-size='15' fill='%23D89B2B'>XC</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo:wght@600;700;900&family=IBM+Plex+Mono:wght@400;500;600&family=Public+Sans:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700&display=swap">
 
 <style>
 :root{
   color-scheme: light;
-  --paper:#F2F4F5; --card:#FFFFFF; --card-2:#F7F9F9;
-  --rule:#DDE3E4; --rule-2:#C3CCCE;
-  --ink:#12181A; --ink-2:#48575B; --ink-3:#7A8A8E;
-  --chrome:#1E3238; --chrome-soft:#E4EBEC;
-  --up:#0E7C66; --up-soft:#D9EFE8;
-  --down:#C0483B; --down-soft:#FAE2DE;
-  --flat:#8B9A9E; --grid:#E8EDEE;
+  --paper:#F5F7FA; --card:#FFFFFF; --card-2:#F8FAFC;
+  --rule:#E2E8F0; --rule-2:#CBD5E1;
+  --ink:#1A202C; --ink-2:#2D3748; --ink-3:#5F6B7A;
+  --chrome:#202A35; --chrome-soft:#FAF0D6;
+  --up:#1C7466; --up-soft:#D6EDE8;
+  --down:#B23A2B; --down-soft:#F8DED9;
+  --flat:#8A96A3; --grid:#EDF2F7;
+  --brand-navy:#202A35; --brand-gold:#D89B2B; --brand-mist:#BFC9D4;
   --shadow:0 1px 2px rgba(18,24,26,.05), 0 8px 22px rgba(18,24,26,.06);
   --r:11px;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     color-scheme: dark;
-    --paper:#0B0F11; --card:#141A1D; --card-2:#1A2225;
-    --rule:#283438; --rule-2:#3B4B50;
-    --ink:#E9EEEF; --ink-2:#A6B5B9; --ink-3:#77878B;
-    --chrome:#A8C6CC; --chrome-soft:#1C282C;
-    --up:#3FBFA0; --up-soft:#11312A;
-    --down:#E58273; --down-soft:#3A1E1A;
+    --paper:#141B23; --card:#1B2430; --card-2:#202A37;
+    --rule:#2C3846; --rule-2:#3A4757;
+    --ink:#E6EBF1; --ink-2:#C4CDD7; --ink-3:#93A0AE;
+    --chrome:#E3A83E; --chrome-soft:#3A2E16;
+    --up:#4DB3A2; --up-soft:#15332E;
+    --down:#E27B66; --down-soft:#3C1F19;
     --flat:#6E7E82; --grid:#222D31;
     --shadow:0 1px 2px rgba(0,0,0,.45), 0 8px 22px rgba(0,0,0,.35);
   }
 }
 :root[data-theme="dark"]{
   color-scheme: dark;
-  --paper:#0B0F11; --card:#141A1D; --card-2:#1A2225; --rule:#283438; --rule-2:#3B4B50;
-  --ink:#E9EEEF; --ink-2:#A6B5B9; --ink-3:#77878B; --chrome:#A8C6CC; --chrome-soft:#1C282C;
-  --up:#3FBFA0; --up-soft:#11312A; --down:#E58273; --down-soft:#3A1E1A;
+  --paper:#141B23; --card:#1B2430; --card-2:#202A37; --rule:#2C3846; --rule-2:#3A4757;
+  --ink:#E6EBF1; --ink-2:#C4CDD7; --ink-3:#93A0AE; --chrome:#E3A83E; --chrome-soft:#3A2E16;
+  --up:#4DB3A2; --up-soft:#15332E; --down:#E27B66; --down-soft:#3C1F19;
   --flat:#6E7E82; --grid:#222D31;
   --shadow:0 1px 2px rgba(0,0,0,.45), 0 8px 22px rgba(0,0,0,.35);
 }
 
 *{box-sizing:border-box}
 body{margin:0;background:var(--paper);color:var(--ink);
-  font-family:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-family:"Source Sans 3",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
-.num{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
-h1,h2,h3,h4{font-family:"Chivo",sans-serif;margin:0}
+.num{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+h1,h2,h3,h4{font-family:"Montserrat",sans-serif;margin:0}
 
-header{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;
-  background:var(--card);border-bottom:1px solid var(--rule)}
-.hd{max-width:1500px;margin:0 auto;padding-inline:22px;padding-block:13px;
-  display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap}
-h1{font-size:19px;font-weight:900;letter-spacing:-.02em}
-.hd .sub{font-size:12px;color:var(--ink-3);margin-top:1px}
+.brandbar{background:var(--brand-navy,#202A35);color:#fff;padding-inline:22px;padding-block:18px 26px}
+.brandbar .inner{max-width:1500px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+.brandtop{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.logo{display:block;line-height:0}
+.logo img{height:64px;width:auto;display:block}
+.brandtop .site{font:600 13px "Montserrat",sans-serif;color:#BFC9D4;text-decoration:none}
+.brandtop .site:hover{color:#D89B2B}
+.hd{display:flex;gap:18px;align-items:flex-end;justify-content:space-between;flex-wrap:wrap}
+.hgroup{display:flex;flex-direction:column;gap:8px}
+.hgroup::before{content:"";width:48px;height:3px;background:#D89B2B;border-radius:2px;margin-bottom:6px}
+.eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#BFC9D4}
+h1{font-size:34px;font-weight:800;line-height:1.1;color:#fff;letter-spacing:0}
+h1 span{color:#D89B2B}
+.hd .sub{font-size:13.5px;color:#BFC9D4}
 .hd-right{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
-.stamp{font-size:12px;color:var(--ink-3)}
-.stamp b{color:var(--ink-2);font-weight:600}
+.stamp{font-size:13px;color:#BFC9D4}
+.stamp b{color:#fff;font-weight:600}
+.brandbar .ctl label{color:#BFC9D4}
+.brandbar select{background:#2A3644;color:#fff;border-color:rgba(255,255,255,.3)}
+.navlinks{display:flex;gap:10px;flex-wrap:wrap}
+.navlink{font:600 13px "Montserrat",sans-serif;color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.4);border-radius:7px;padding:8px 14px;white-space:nowrap}
+.navlink:hover{border-color:#D89B2B;color:#D89B2B}
+.navlink:focus-visible{outline:2px solid #D89B2B;outline-offset:2px}
+.brandfoot{background:#202A35;color:#BFC9D4;padding-inline:22px;padding-block:22px}
+.brandfoot .inner{max-width:1500px;margin:0 auto;display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;font-size:13px}
+.brandfoot b{font-family:"Montserrat",sans-serif;color:#fff;font-weight:700;letter-spacing:.04em}
+.brandfoot a{color:#D89B2B;text-decoration:none;font-weight:600}
+.brandfoot a:hover{text-decoration:underline}
 
 .ctl{display:flex;align-items:center;gap:7px}
 .ctl label{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-3);font-weight:600}
-select{font-family:"IBM Plex Mono",monospace;font-size:12.5px;font-weight:500;
+select{font-family:"JetBrains Mono",monospace;font-size:12.5px;font-weight:500;
   background:var(--card-2);color:var(--ink);border:1px solid var(--rule-2);
   border-radius:7px;padding:5px 9px;cursor:pointer}
 select:focus-visible{outline:2px solid var(--chrome);outline-offset:2px}
@@ -91,19 +112,19 @@ main{max-width:1500px;margin:0 auto;padding-inline:22px;padding-block:18px 52px}
 .heads{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
 .head{background:var(--card);border:1px solid var(--rule);border-radius:var(--r);
   box-shadow:var(--shadow);padding:13px 14px 8px}
-.head .nm{font-family:"Chivo",sans-serif;font-size:12.5px;font-weight:700;letter-spacing:-.005em}
+.head .nm{font-family:"Montserrat",sans-serif;font-size:12.5px;font-weight:700;letter-spacing:-.005em}
 .head .row{display:flex;align-items:baseline;gap:9px;margin-top:5px;flex-wrap:wrap}
-.head .px{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;
+.head .px{font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums;
   font-size:22px;font-weight:500;letter-spacing:-.02em;line-height:1.1}
-.head .ch{font-family:"IBM Plex Mono",monospace;font-size:12.5px;font-weight:600}
+.head .ch{font-family:"JetBrains Mono",monospace;font-size:12.5px;font-weight:600}
 .head .spark{margin-top:7px}
-.head .rng{display:flex;justify-content:space-between;font-family:"IBM Plex Mono",monospace;
+.head .rng{display:flex;justify-content:space-between;font-family:"JetBrains Mono",monospace;
   font-size:10px;color:var(--ink-3);margin-top:2px}
 
 .tabs{display:flex;gap:3px;border-bottom:1px solid var(--rule);overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
 .tab{appearance:none;border:0;background:none;cursor:pointer;white-space:nowrap;
-  font-family:"Public Sans",sans-serif;font-size:13px;font-weight:600;color:var(--ink-3);
+  font-family:"Source Sans 3",sans-serif;font-size:13px;font-weight:600;color:var(--ink-3);
   padding:9px 15px;border-bottom:2px solid transparent;margin-bottom:-1px}
 .tab:hover{color:var(--ink)}
 .tab[aria-selected="true"]{color:var(--chrome);border-bottom-color:var(--chrome)}
@@ -117,7 +138,7 @@ main{max-width:1500px;margin:0 auto;padding-inline:22px;padding-block:18px 52px}
 .ph{padding:10px 14px;border-bottom:1px solid var(--rule);background:var(--card-2);
   display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .ph h3{font-size:12.5px;font-weight:700;letter-spacing:-.005em}
-.ph .meta{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-3)}
+.ph .meta{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--ink-3)}
 
 .tw{overflow-x:auto}
 table{border-collapse:collapse;width:100%;font-size:12.5px}
@@ -134,20 +155,20 @@ tbody tr:hover td .c{background:var(--chrome-soft)}
 tbody tr[aria-selected="true"] td .c{background:var(--chrome-soft);font-weight:600}
 tbody tr[aria-selected="true"] td:first-child .c{box-shadow:inset 3px 0 0 var(--chrome)}
 .nmcell{font-weight:500;color:var(--ink)}
-.pcell{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
-.chg{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;
+.pcell{font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums}
+.chg{font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums;
   border-radius:4px;padding:2px 5px;display:inline-block;min-width:54px;text-align:right}
 .na{color:var(--ink-3)}
 
 .cbody{padding:12px 14px 14px}
 .legend{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:9px;
-  font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-2)}
+  font-family:"JetBrains Mono",monospace;font-size:11.5px;color:var(--ink-2)}
 .legend b{color:var(--ink);font-weight:600}
 svg{display:block;width:100%;height:auto;overflow:visible}
 .gl{stroke:var(--grid);stroke-width:1}
-.axl{font-family:"IBM Plex Mono",monospace;font-size:9.5px;fill:var(--ink-3)}
+.axl{font-family:"JetBrains Mono",monospace;font-size:9.5px;fill:var(--ink-3)}
 .pills{display:flex;gap:5px;flex-wrap:wrap;margin-top:11px}
-.pill{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--ink-2);
+.pill{font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--ink-2);
   background:var(--card-2);border:1px solid var(--rule);border-radius:999px;padding:3px 9px}
 .pill b{font-weight:600}
 
@@ -155,13 +176,13 @@ svg{display:block;width:100%;height:auto;overflow:visible}
 .gauge{margin-top:13px;padding-top:12px;border-top:1px solid var(--rule)}
 .gauge .lab{display:flex;justify-content:space-between;align-items:baseline;
   font-size:10.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-3);font-weight:600}
-.gauge .lab span:last-child{font-family:"IBM Plex Mono",monospace;text-transform:none;
+.gauge .lab span:last-child{font-family:"JetBrains Mono",monospace;text-transform:none;
   letter-spacing:0;font-size:11px;color:var(--ink-2);font-weight:500}
 .track{position:relative;height:9px;border-radius:5px;margin-top:7px;
   background:linear-gradient(90deg,var(--down-soft),var(--card-2) 50%,var(--up-soft))}
 .mark{position:absolute;top:-3px;width:3px;height:15px;border-radius:2px;background:var(--chrome)}
 .ends{display:flex;justify-content:space-between;margin-top:5px;
-  font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink-3)}
+  font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--ink-3)}
 
 /* dispersion ladder */
 .ladder{padding:11px 14px 14px;display:grid;
@@ -172,7 +193,7 @@ svg{display:block;width:100%;height:auto;overflow:visible}
 .lrow[aria-selected="true"]{background:var(--chrome-soft)}
 .lrow .ln{font-size:11.5px;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .lrow[aria-selected="true"] .ln{color:var(--ink);font-weight:600}
-.lrow .lv{font-family:"IBM Plex Mono",monospace;font-size:11px;text-align:right;font-variant-numeric:tabular-nums}
+.lrow .lv{font-family:"JetBrains Mono",monospace;font-size:11px;text-align:right;font-variant-numeric:tabular-nums}
 .lbar{position:relative;height:11px}
 .lbar .zero{position:absolute;top:-1px;bottom:-1px;width:1px;background:var(--rule-2)}
 .lbar i{position:absolute;top:1px;height:9px;border-radius:2px;display:block}
@@ -188,23 +209,23 @@ svg{display:block;width:100%;height:auto;overflow:visible}
 .fgrid tr:last-child td{border-bottom:0}
 .fgrid .fname{padding:9px 10px;font-weight:600;color:var(--ink);white-space:nowrap}
 .fcell{display:block;padding:11px 8px;text-align:center;
-  font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;
+  font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums;
   font-size:12.5px;font-weight:600;cursor:pointer;position:relative}
 .fcell:hover{box-shadow:inset 0 0 0 2px var(--rule-2)}
 .fcell[aria-selected="true"]{box-shadow:inset 0 0 0 2px var(--chrome)}
 .fcell .sub{display:block;font-size:9px;font-weight:400;color:var(--ink-3);
   margin-top:1px;letter-spacing:.02em}
 .fnone{display:block;padding:11px 8px;text-align:center;color:var(--ink-3);
-  font-family:"IBM Plex Mono",monospace;font-size:12px;
+  font-family:"JetBrains Mono",monospace;font-size:12px;
   background:repeating-linear-gradient(45deg,transparent,transparent 5px,var(--card-2) 5px,var(--card-2) 10px)}
 .fgrid td.avgcol{border-left:1px solid var(--rule-2)}
-.favg{display:block;padding:11px 9px;text-align:right;font-family:"IBM Plex Mono",monospace;
+.favg{display:block;padding:11px 9px;text-align:right;font-family:"JetBrains Mono",monospace;
   font-variant-numeric:tabular-nums;font-size:12.5px;font-weight:700}
 
 /* breadth */
 .half{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start}
 .bcell{display:block;padding:9px 8px;text-align:center;
-  font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;
+  font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums;
   font-size:13px;font-weight:600}
 .bcell .sub{display:block;font-size:8.5px;font-weight:400;color:var(--ink-3);
   margin-top:1px;letter-spacing:.03em;text-transform:uppercase}
@@ -218,7 +239,7 @@ svg{display:block;width:100%;height:auto;overflow:visible}
 .psub{display:block;font-size:8.5px;font-weight:400;color:var(--ink-3);
   margin-top:1px;letter-spacing:.03em;text-transform:uppercase}
 .uswitch{display:flex;gap:4px;margin-left:auto}
-.usw{appearance:none;cursor:pointer;font-family:"IBM Plex Mono",monospace;font-size:10.5px;
+.usw{appearance:none;cursor:pointer;font-family:"JetBrains Mono",monospace;font-size:10.5px;
   background:var(--card);color:var(--ink-3);border:1px solid var(--rule-2);
   border-radius:999px;padding:2px 9px}
 .usw[aria-pressed="true"]{background:var(--chrome);color:var(--card);border-color:var(--chrome)}
@@ -228,36 +249,47 @@ svg{display:block;width:100%;height:auto;overflow:visible}
   box-shadow:var(--shadow);padding:15px 17px;font-size:12.5px;color:var(--ink-2);margin-top:28px}
 .note p{margin:0 0 9px;line-height:1.6;max-width:76ch}
 .note p:last-child{margin-bottom:0}
-code{font-family:"IBM Plex Mono",monospace;font-size:11.5px;background:var(--card-2);
+code{font-family:"JetBrains Mono",monospace;font-size:11.5px;background:var(--card-2);
   border:1px solid var(--rule);border-radius:4px;padding:1px 5px}
 
 #tip{position:fixed;z-index:90;pointer-events:none;opacity:0;transition:opacity .1s;
   background:var(--ink);color:var(--paper);border-radius:7px;padding:8px 10px;
-  font-family:"IBM Plex Mono",monospace;font-size:11px;line-height:1.55;
+  font-family:"JetBrains Mono",monospace;font-size:11px;line-height:1.55;
   box-shadow:0 5px 16px rgba(0,0,0,.3);white-space:nowrap}
 #tip .d{font-weight:600;margin-bottom:3px;display:block}
 
 @media (max-width:1150px){ .heads{grid-template-columns:repeat(2,1fr)} .split{grid-template-columns:1fr} }
-@media (max-width:560px){ .heads{grid-template-columns:1fr} .hd{gap:11px} h1{font-size:17px}
+@media (max-width:560px){ .heads{grid-template-columns:1fr} .hd{gap:11px} h1{font-size:27px} .logo img{height:52px} .brandbar,.brandfoot{padding-inline:16px}
   .lrow{grid-template-columns:1fr 56px 78px} }
 @media (prefers-reduced-motion:reduce){ *{transition:none!important} }
 </style>
 
-<header>
-  <div class="hd">
-    <div>
-      <h1>Indian Market Today</h1>
-      <div class="sub" id="sub">—</div>
+<div class="brandbar">
+  <div class="inner">
+    <div class="brandtop">
+      <a class="logo" href="https://xumitcapital.com/" aria-label="Xumit Capital home"><img src="data:image/webp;base64,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" alt="Xumit Capital" width="160" height="64"></a>
+      <a class="site" href="https://xumitcapital.com/">xumitcapital.com</a>
     </div>
-    <div class="hd-right">
-      <div class="ctl">
-        <label for="tf">Timeframe</label>
-        <select id="tf"></select>
+    <div class="hd">
+      <div class="hgroup">
+        <span class="eyebrow">NSE indices · factors · breadth · new highs and lows</span>
+        <h1>Indian Market <span>Today</span></h1>
+        <div class="sub" id="sub">—</div>
       </div>
-      <div class="stamp">As of <b class="num" id="asof">—</b></div>
+      <div class="hd-right">
+        <div class="ctl">
+          <label for="tf">Timeframe</label>
+          <select id="tf"></select>
+        </div>
+        <div class="stamp">As of <b class="num" id="asof">—</b></div>
+      </div>
+    </div>
+    <div class="navlinks">
+      <a class="navlink" href="https://tools.xumitcapital.com/india-breadth/">India Breadth Monitor →</a>
+      <a class="navlink" href="https://tools.xumitcapital.com/india-conditions.html">India Conditions Readout →</a>
     </div>
   </div>
-</header>
+</div>
 
 <main>
   <div class="band" style="margin-top:4px">
@@ -352,6 +384,13 @@ code{font-family:"IBM Plex Mono",monospace;font-size:11.5px;background:var(--car
     <p id="note2">—</p>
   </div>
 </main>
+
+<footer class="brandfoot">
+  <div class="inner">
+    <span><b>XUMIT CAPITAL</b> &nbsp;·&nbsp; Portfolio advisory, global residency and international structuring. This page describes market conditions only and is not investment advice.</span>
+    <a href="https://xumitcapital.com/">xumitcapital.com →</a>
+  </div>
+</footer>
 
 <div id="tip" role="tooltip"></div>
 
@@ -1100,7 +1139,7 @@ function nhChart(side){
     <svg id="nhsvg-${side}" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"
       style="height:${H}px">${nhBars(v, col, W, H, pad)}</svg>
     <div class="rng" style="display:flex;justify-content:space-between;
-      font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink-3)">
+      font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-3)">
       <span>${fmtDate(N.t[0])}</span><span>${fmtDate(N.t[N.t.length-1])}</span>
     </div>${extra}</div>`;
 }
