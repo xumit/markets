@@ -38,6 +38,27 @@ MAX_JUMP = {"NSE:INDIAVIX": 0.6, "TVC:VIX": 0.8}   # volatility indices can legi
 DEFAULT_JUMP = 0.15
 IST = dt.timezone(dt.timedelta(hours=5, minutes=30))
 
+# Hours after midnight IST of a bar's own trading date by which that market's
+# session is certainly over. A bar is not saved until then, because until then
+# TradingView is serving the session as it forms and its "close" is just the
+# last print. date_to does not protect against this: it caps the date, not the
+# session, so an evening run in India gets a complete NSE day alongside a US
+# session that has not opened. Forming bars reached this file twice -- on
+# 26 Oct 2026 Brent was saved at 109.94 and US VIX at 19.68, and they settled
+# at 110.14 and 19.02; on 27 Oct VIX was saved at 17.83 against a 26 Oct close
+# of 18.40. Both had to be unpicked by hand. These are deliberately generous:
+# a bar arrives a few hours later rather than wrong, and the page dates every
+# measure separately so the previous session reads honestly in the meantime.
+SESSION_DONE = {
+    "NSE:NIFTY50EQUALWEIGHT": 16, "NSE:NIFTY": 16, "NSE:NIFTY500_EW": 16,
+    "NSE:CNX500": 16, "NSE:CNXMETAL": 16, "NSE:CNXFMCG": 16,
+    "NSE:CNXFINANCE": 16, "NSE:INDIAVIX": 16,   # NSE closes 15:30 IST
+    "TVC:IN10Y": 18,        # Indian government-bond market closes 17:00 IST
+    "TVC:VIX": 27,          # US cash close 16:15 ET, 01:45-02:45 IST next day
+    "FX_IDC:USDINR": 28,    # FX day rolls at 17:00 ET
+    "TVC:UKOIL": 29,        # Brent closes 23:00 London
+}
+
 
 def day(t):
     # TradingView stamps daily bars at the session open in UTC; +6h lands every
@@ -45,8 +66,15 @@ def day(t):
     return dt.datetime.fromtimestamp(int(t) + 6 * 3600, dt.timezone.utc).strftime("%Y-%m-%d")
 
 
+def session_over(sym, d, now=None):
+    """True once the trading session dated d has certainly closed for sym."""
+    now = now or dt.datetime.now(IST)
+    midnight = dt.datetime.strptime(d, "%Y-%m-%d").replace(tzinfo=IST)
+    return now >= midnight + dt.timedelta(hours=SESSION_DONE[sym])
+
+
 def merge(history, new):
-    problems, added = [], {}
+    problems, added, held = [], {}, {}
     for sym, cols in new.items():
         if sym not in SYMBOLS:
             problems.append(f"{sym}: not one of the dashboard's symbols")
@@ -59,6 +87,9 @@ def merge(history, new):
         incoming = sorted((day(a), float(b)) for a, b in zip(t, c) if b is not None)
         limit = MAX_JUMP.get(sym, DEFAULT_JUMP)
         for d, v in incoming:
+            if not session_over(sym, d):
+                held.setdefault(sym, []).append(d)
+                continue
             prev = [x for x in sorted(rows) if x < d]
             if prev:
                 p = rows[prev[-1]]
@@ -69,7 +100,7 @@ def merge(history, new):
                 added.setdefault(sym, []).append(d)
             rows[d] = v
         history[sym] = [[d, rows[d]] for d in sorted(rows)][-KEEP:]
-    return problems, added
+    return problems, added, held
 
 
 def render(history):
@@ -94,10 +125,14 @@ def main():
 
     history = json.loads(HISTORY.read_text()) if HISTORY.exists() else {}
     if args.new:
-        problems, added = merge(history, json.loads(pathlib.Path(args.new).read_text()))
+        problems, added, held = merge(history, json.loads(pathlib.Path(args.new).read_text()))
         for sym in SYMBOLS:
             if sym in added:
                 print(f"updated {sym}: {', '.join(added[sym][-5:])}")
+        for sym in SYMBOLS:
+            if sym in held:
+                print(f"held back {sym}: {', '.join(held[sym])} — that session "
+                      f"has not closed yet; it will be picked up on a later run")
         if problems:
             print("NOT SAVED — fix these and run again:\n  " + "\n  ".join(problems))
             sys.exit(1)
