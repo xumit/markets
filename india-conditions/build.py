@@ -53,7 +53,11 @@ SESSION_DONE = {
     "NSE:NIFTY50EQUALWEIGHT": 16, "NSE:NIFTY": 16, "NSE:NIFTY500_EW": 16,
     "NSE:CNX500": 16, "NSE:CNXMETAL": 16, "NSE:CNXFMCG": 16,
     "NSE:CNXFINANCE": 16, "NSE:INDIAVIX": 16,   # NSE closes 15:30 IST
-    "TVC:IN10Y": 18,        # Indian government-bond market closes 17:00 IST
+    # The government-bond market closes 17:00 IST. 18 hours meant a run started
+    # before 18:00 IST — which is when these runs often happen — held the 10-year
+    # back every time and left it a session behind on the page indefinitely, not
+    # just once. 17.5 keeps a 30-minute margin past the close and ends that.
+    "TVC:IN10Y": 17.5,
     "TVC:VIX": 27,          # US cash close 16:15 ET, 01:45-02:45 IST next day
     "FX_IDC:USDINR": 28,    # FX day rolls at 17:00 ET
     "TVC:UKOIL": 29,        # Brent closes 23:00 London
