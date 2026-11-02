@@ -20,6 +20,10 @@ Public dashboards for Indian equities, built from the daily NSE bhavcopy.
   10-year Treasury yield volatility) scored against their own past year, plus credit
   spreads and funding plumbing. Built by `us-conditions/build.py` from
   `us-conditions/history.json`, the same way as the India page.
+- `btc-monthly-returns/index.html` — **XC Bitcoin Monthly Returns** (tools.xumitcapital.com/btc-monthly-returns/):
+  month-by-year returns of Bitcoin (USD, month-end close to month-end close) for all data, the last
+  10 years and the last 5 years, with statistics by calendar month and by election-cycle group.
+  Self-contained: the monthly returns are embedded in the page.
 - `index.html` — a fixed redirect to `indian-market-today/`. Do not overwrite it.
 
 The page is self-contained: all data for the as-of date is embedded, so there is
