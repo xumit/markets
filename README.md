@@ -27,6 +27,9 @@ Public dashboards for Indian equities, built from the daily NSE bhavcopy.
   (INDEX:BTCUSD) by the steps in `btc-monthly-returns/build/`: `history.json` holds the daily closes,
   `update_history.py` merges the newest closed bars, and `build_page.py` rebuilds the page from
   `template.html`.
+- `btc-bear-cycles/index.html` — **Bitcoin Bear Cycles** (tools.xumitcapital.com/btc-bear-cycles/):
+  the five bear cycles from their peaks, rebased to 1.00, with an average line. Click a cycle name to
+  show or hide its line. Includes a summary table. Self-contained; figures from TradingView daily closes.
 - `index.html` — a fixed redirect to `indian-market-today/`. Do not overwrite it.
 
 The page is self-contained: all data for the as-of date is embedded, so there is
