@@ -34,6 +34,9 @@ Public dashboards for Indian equities, built from the daily NSE bhavcopy.
   the six bull cycles from their starting closes, rebased to 1.00, on a log scale. Median or mean
   average, with Bull Cycle 1 optional. Click a cycle name to show or hide its line. Self-contained;
   figures from TradingView daily closes.
+- `btc-halving-cycles/index.html` — **Bitcoin Halving-to-Halving Cycles** (tools.xumitcapital.com/btc-halving-cycles/):
+  each period between halvings from its starting close, rebased to 1.00, on a log scale. Median or mean
+  average, with H-H Cycle 1 optional. Click a cycle name to show or hide its line. Self-contained; figures from TradingView daily closes.
 - `index.html` — a fixed redirect to `indian-market-today/`. Do not overwrite it.
 
 The page is self-contained: all data for the as-of date is embedded, so there is
