@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Daily S&amp;P 500 advance/decline and moving-average breadth.">
+<title>US Breadth Monitor | Xumit Capital</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23202A35'/><text x='16' y='22' text-anchor='middle' font-family='Montserrat,Arial,sans-serif' font-weight='800' font-size='15' fill='%23D89B2B'>XC</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Source+Sans+3:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+:root{
+  color-scheme: light;
+  --paper:#F5F7FA; --card:#FFFFFF; --card-2:#F8FAFC; --line:#E2E8F0; --line-strong:#CBD5E1;
+  --ink:#1A202C; --ink-2:#2D3748; --ink-3:#5F6B7A;
+  --accent:#185ADB; --accent-soft:#E8EEFB;
+  --pos:#1C7466; --pos-soft:#D6EDE8; --neg:#B23A2B; --neg-soft:#F8DED9;
+  --warn-line:#D89B2B;
+  --brand-navy:#202A35; --brand-gold:#D89B2B; --brand-mist:#BFC9D4;
+  --c-adv:#1C7466; --c-dec:#B23A2B; --c-ratio:#D89B2B;
+  --c-ma20:#185ADB; --c-ma50:#D89B2B; --c-ma200:#202A35;
+  --heat-0:#A8DCC8; --heat-1:#BFE5D5; --heat-2:#D4ECE2; --heat-3:#E4F1EB; --heat-4:#E9ECEF;
+  --heat-5:#FAEFCC; --heat-6:#F9E0B0; --heat-7:#F7CB9C; --heat-8:#F3B295; --heat-9:#EC968C; --heat-10:#E37C7F;
+  --hm-lo:#F2C4BD; --hm-mid:#FFFFFF; --hm-hi:#BFE3D6;
+  --shadow:0 1px 2px rgba(22,26,32,.04);
+  --r:10px;
+  --display:"Montserrat","Segoe UI",Arial,sans-serif;
+  --body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --paper:#141B23; --card:#1B2430; --card-2:#202A37; --line:#2C3846; --line-strong:#3A4757;
+    --ink:#E6EBF1; --ink-2:#C4CDD7; --ink-3:#93A0AE;
+    --accent:#6E9BF5; --accent-soft:#1F2C40;
+    --pos:#4DB3A2; --pos-soft:#15332E; --neg:#E27B66; --neg-soft:#3C1F19;
+    --c-adv:#4DB3A2; --c-dec:#E27B66; --c-ratio:#E3A83E;
+    --c-ma20:#6E9BF5; --c-ma50:#E3A83E; --c-ma200:#D6DEE7;
+    --heat-0:#10513F; --heat-1:#14604B; --heat-2:#186852; --heat-3:#1C6152; --heat-4:#2B333B;
+    --heat-5:#4E4527; --heat-6:#5A462A; --heat-7:#623F2B; --heat-8:#68372C; --heat-9:#70312E; --heat-10:#782B2E;
+    --hm-lo:#5A2A25; --hm-mid:#1B2430; --hm-hi:#1E5446;
+    --shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --paper:#141B23; --card:#1B2430; --card-2:#202A37; --line:#2C3846; --line-strong:#3A4757;
+  --ink:#E6EBF1; --ink-2:#C4CDD7; --ink-3:#93A0AE;
+  --accent:#6E9BF5; --accent-soft:#1F2C40;
+  --pos:#4DB3A2; --pos-soft:#15332E; --neg:#E27B66; --neg-soft:#3C1F19;
+  --c-adv:#4DB3A2; --c-dec:#E27B66; --c-ratio:#E3A83E;
+  --c-ma20:#6E9BF5; --c-ma50:#E3A83E; --c-ma200:#D6DEE7;
+  --heat-0:#10513F; --heat-1:#14604B; --heat-2:#186852; --heat-3:#1C6152; --heat-4:#2B333B;
+  --heat-5:#4E4527; --heat-6:#5A462A; --heat-7:#623F2B; --heat-8:#68372C; --heat-9:#70312E; --heat-10:#782B2E;
+  --hm-lo:#5A2A25; --hm-mid:#1B2430; --hm-hi:#1E5446;
+  --shadow:none;
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* ---------- brand ---------- */
+.brandbar{background:var(--brand-navy);color:#fff;padding-inline:20px;padding-block:18px 28px}
+.brandbar .inner{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+.brandtop{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.logo{display:block;line-height:0}
+.logo img{height:64px;width:auto;display:block}
+.brandtop .site{font:600 13px var(--display);color:var(--brand-mist);text-decoration:none}
+.brandtop .site:hover{color:var(--brand-gold)}
+.bhead{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between}
+.hgroup{display:flex;flex-direction:column;gap:8px}
+.hgroup::before{content:"";width:48px;height:3px;background:var(--brand-gold);border-radius:2px;margin-bottom:6px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.brandbar .eyebrow{color:var(--brand-mist)}
+h1{font-family:var(--display);font-weight:800;font-size:34px;line-height:1.1;margin:0;color:#fff;text-wrap:balance}
+h1 span{color:var(--brand-gold)}
+.stamp{display:flex;gap:6px 16px;flex-wrap:wrap;font-size:13px;color:var(--brand-mist)}
+.stamp .k{color:#fff;font-weight:600}
+.hmeta{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.navlink{font:600 13px var(--display);color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.4);border-radius:7px;padding:9px 16px;white-space:nowrap}
+.navlink:hover{border-color:var(--brand-gold);color:var(--brand-gold)}
+.navlink:focus-visible{outline:2px solid var(--brand-gold);outline-offset:2px}
+.brandfoot{background:var(--brand-navy);color:var(--brand-mist);padding-inline:20px;padding-block:22px}
+.brandfoot .inner{max-width:1120px;margin:0 auto;display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;font-size:13px}
+.brandfoot b{font-family:var(--display);color:#fff;font-weight:700;letter-spacing:.04em}
+.brandfoot a{color:var(--brand-gold);text-decoration:none;font-weight:600}
+.brandfoot a:hover{text-decoration:underline}
+
+/* ---------- layout ---------- */
+main{max-width:1120px;margin:0 auto;padding-inline:20px;padding-block:24px 48px}
+section{margin-bottom:30px}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.sec-title{display:flex;flex-direction:column;gap:4px}
+h2{font-family:var(--display);font-weight:700;font-size:22px;margin:0;color:var(--ink);text-wrap:balance}
+h3{font-family:var(--display);font-size:14px;font-weight:600;margin:0}
+.hint{font-size:13px;color:var(--ink-3)}
+.lead{color:var(--ink-2);max-width:72ch;margin:0}
+
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.tiles.five{grid-template-columns:repeat(5,minmax(0,1fr))}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow)}
+.tile .lab{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-3);font-weight:600}
+.tile .val{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:25px;font-weight:500;margin-top:5px;line-height:1.1}
+.tile .note{font-size:12.5px;color:var(--ink-3);margin-top:4px}
+
+.split{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:14px;align-items:start}
+.charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+.panel-head{padding:11px 16px;border-bottom:1px solid var(--line);background:var(--card-2);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.panel-body{padding:12px 16px}
+
+/* ---------- tabs ---------- */
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--line);margin-bottom:14px}
+.tabs::-webkit-scrollbar{display:none}
+.tab{appearance:none;border:0;background:none;cursor:pointer;font:600 13px var(--display);color:var(--ink-3);padding:10px 14px;border-bottom:2px solid transparent;white-space:nowrap}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--brand-gold)}
+.tab:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;border-radius:4px}
+
+/* ---------- tables ---------- */
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th{text-align:right;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line-strong);white-space:nowrap}
+th:first-child{text-align:left}
+td{padding:0;border-bottom:1px solid var(--line)}
+tbody tr:last-child td{border-bottom:0}
+td .cell{padding:7px 10px;text-align:right;white-space:nowrap}
+td:first-child .cell{text-align:left}
+.bucket-lab{font-family:var(--mono);font-size:12.5px;color:var(--ink)}
+.heat{font-weight:600;font-family:var(--mono);font-variant-numeric:tabular-nums}
+tbody tr:hover .cell{background:var(--accent-soft)}
+tbody tr:hover td.heatcell .cell{background:none}
+.zero{color:var(--ink-3)}
+
+/* ---------- daily table ---------- */
+.dtable td .cell{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.dtable td:first-child .cell{font-family:var(--body);font-weight:600}
+.dtable tbody tr:hover td.hm .cell{background:inherit}
+.dtable tfoot td{border-top:2px solid var(--line-strong);border-bottom:0}
+.dtable tfoot td .cell{font-family:var(--mono);font-weight:600}
+.dtable tfoot td:first-child .cell{font-family:var(--display);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+.up{color:var(--pos)} .down{color:var(--neg)}
+.avg-up{background:var(--pos-soft);color:var(--pos)} .avg-down{background:var(--neg-soft);color:var(--neg)}
+select{font:600 13px var(--body);color:var(--ink);background:var(--card);border:1px solid var(--line-strong);border-radius:6px;padding:6px 10px}
+select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ---------- charts ---------- */
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--ink-2)}
+.legend i{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
+.legend i.dash{background:none!important;border-top:2px dashed}
+svg.ch{width:100%;height:auto;display:block;touch-action:none}
+svg.ch .grid{stroke:var(--line);stroke-width:1}
+svg.ch .axl{fill:var(--ink-3);font:10.5px var(--mono)}
+svg.ch .cross{stroke:var(--ink-3);stroke-width:1}
+.readout{font:12px var(--mono);color:var(--ink-3);min-height:18px;margin-top:6px}
+
+/* ---------- histogram ---------- */
+.bars{display:flex;flex-direction:column;gap:5px}
+.bar-row{display:grid;grid-template-columns:86px minmax(0,1fr);gap:9px;align-items:center}
+.bar-lab{font-family:var(--mono);font-size:11px;color:var(--ink-2);text-align:right;white-space:nowrap}
+.bar-track{position:relative;height:19px;background:var(--card-2);border-radius:3px}
+.bar-fill{height:100%;border-radius:0 4px 4px 0;min-width:2px;transition:width .35s cubic-bezier(.4,0,.2,1)}
+.bar-val{position:absolute;top:50%;transform:translateY(-50%);left:8px;font-family:var(--mono);font-size:11px;font-weight:500;color:var(--ink-2);pointer-events:none}
+.bar-row:hover .bar-track{outline:2px solid var(--line-strong);outline-offset:1px}
+
+/* ---------- callouts ---------- */
+.callouts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.callout{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow);border-left:3px solid var(--line-strong)}
+.callout .big{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:24px;font-weight:500;line-height:1.1}
+.callout .txt{font-size:13px;color:var(--ink-2);margin-top:4px}
+.callout .cnt{font-size:12px;color:var(--ink-3);margin-top:2px;font-family:var(--mono)}
+
+/* ---------- sector ---------- */
+.minibar{display:inline-block;height:7px;border-radius:2px;vertical-align:middle;min-width:2px}
+.minibar-wrap{display:flex;align-items:center;gap:7px;justify-content:flex-end}
+
+/* ---------- pending ---------- */
+.pending-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px 22px;max-width:560px}
+.pending-title{font-family:var(--display);font-weight:600;font-size:16px}
+.pending-body{color:var(--ink-2);font-size:13.5px;line-height:1.6;margin:8px 0 18px;max-width:52ch}
+.progress{height:7px;background:var(--card-2);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);border-radius:0 3px 3px 0;min-width:2px;transition:width .4s ease}
+.progress-lab{display:flex;justify-content:space-between;margin-top:7px;font-family:var(--mono);font-size:11.5px;color:var(--ink-3)}
+.tab .pend{opacity:.55;font-size:10px;margin-left:5px}
+
+/* ---------- data notes ---------- */
+.meta{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;font-size:13.5px;color:var(--ink-2)}
+.meta dl{display:grid;grid-template-columns:auto 1fr;gap:5px 16px;margin:0}
+.meta dt{color:var(--ink-3);font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;padding-top:2px}
+.meta dd{margin:0;font-family:var(--mono);font-size:12.5px}
+.meta p{margin:12px 0 0;line-height:1.55}
+.banner{margin-top:12px;padding:10px 12px;border-left:3px solid var(--brand-gold);background:var(--card-2);border-radius:0 6px 6px 0;font-size:13px;color:var(--ink-2)}
+.banner b{font-family:var(--display);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:11px;margin-right:8px;color:var(--ink)}
+
+.btn{appearance:none;cursor:pointer;font:600 12px var(--body);background:var(--card);color:var(--ink-2);border:1px solid var(--line-strong);border-radius:6px;padding:4px 10px}
+.btn:hover{background:var(--accent-soft);color:var(--ink)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+#tip{position:fixed;z-index:80;pointer-events:none;opacity:0;transition:opacity .12s;background:var(--ink);color:var(--paper);border-radius:6px;padding:7px 10px;font-size:12px;line-height:1.45;max-width:230px;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+#tip .tt{font-weight:600;font-family:var(--mono);display:block;margin-bottom:2px}
+
+@media (max-width:900px){
+  .tiles,.tiles.five{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .split,.charts{grid-template-columns:minmax(0,1fr)}
+  .callouts{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:520px){
+  main{padding-inline:16px}
+  .brandbar,.brandfoot{padding-inline:16px}
+  h1{font-size:27px}
+  .logo img{height:52px}
+  .tile .val{font-size:22px}
+  .bar-row{grid-template-columns:74px minmax(0,1fr)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="brandbar">
+  <div class="inner">
+    <div class="brandtop">
+      <a class="logo" href="https://xumitcapital.com/" aria-label="Xumit Capital home"><img src="data:image/webp;base64,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" alt="Xumit Capital" width="160" height="64"></a>
+      <a class="site" href="https://xumitcapital.com/">xumitcapital.com</a>
+    </div>
+    <div class="bhead">
+      <div class="hgroup">
+        <span class="eyebrow">Market breadth · how many S&amp;P 500 stocks are taking part</span>
+        <h1>US Breadth <span>Monitor</span></h1>
+        <div class="stamp">
+          <span><span class="k">As of</span> <span class="num" id="m-asof">—</span></span>
+          <span><span class="k">Universe</span> <span id="m-universe">—</span></span>
+          <span><span class="k">Updated</span> <span id="m-updated">—</span></span>
+        </div>
+      </div>
+      <div class="hmeta">
+        <a class="navlink" href="https://tools.xumitcapital.com/us-conditions.html">US Conditions Readout →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main>
+  <section id="daily-section">
+    <div class="sec-head">
+      <div class="sec-title">
+        <span class="eyebrow">Day by day · S&amp;P 500</span>
+        <h2>Daily breadth</h2>
+        <p class="lead">Advancing and declining stocks each session, and the share trading above their 20, 50 and 200-day averages, alongside the S&amp;P 500 itself.</p>
+      </div>
+      <label class="hint">Period&nbsp; <select id="d-period" aria-label="Period"></select></label>
+    </div>
+
+    <div class="tiles five" id="d-tiles"></div>
+
+    <div class="charts">
+      <div class="panel">
+        <div class="panel-head"><h3>Advance / decline</h3>
+          <div class="legend"><span><i style="background:var(--c-adv)"></i>Advancing</span><span><i style="background:var(--c-dec)"></i>Declining</span><span><i class="dash" style="border-color:var(--c-ratio)"></i>A/D ratio (right)</span></div>
+        </div>
+        <div class="panel-body"><div id="ch-ad"></div><div class="readout" id="ro-ad"></div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h3>Share above moving average</h3>
+          <div class="legend"><span><i style="background:var(--c-ma20)"></i>20-day</span><span><i style="background:var(--c-ma50)"></i>50-day</span><span><i style="background:var(--c-ma200)"></i>200-day</span></div>
+        </div>
+        <div class="panel-body"><div id="ch-ma"></div><div class="readout" id="ro-ma"></div></div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:14px">
+      <div class="panel-head"><h3 id="d-title">—</h3><button class="btn" id="d-copy" type="button">Copy CSV</button></div>
+      <div class="tw">
+        <table class="dtable">
+          <thead><tr>
+            <th>Date</th><th>Advancing</th><th>Declining</th><th>Net advance</th><th>A/D ratio</th>
+            <th>&gt; 20 DMA</th><th>&gt; 50 DMA</th><th>&gt; 200 DMA</th><th>S&amp;P 500</th><th>Return</th>
+          </tr></thead>
+          <tbody id="d-body"></tbody>
+          <tfoot id="d-foot"></tfoot>
+        </table>
+      </div>
+    </div>
+    <p class="hint" style="margin-top:8px">Shading runs from red (the period's lowest reading) through white (its median) to green (its highest), column by column.</p>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>About the data</h2></div>
+    <div class="meta">
+      <dl>
+        <dt>Daily breadth</dt><dd id="d-dmeta">—</dd>
+        <dt>Source</dt><dd>Daily closes of every S&amp;P 500 member, adjusted for splits and dividends; index level from the S&amp;P 500</dd>
+      </dl>
+      <p>
+        Daily breadth counts today's S&amp;P 500 members that closed up or down on the session (a stock that
+        closed exactly unchanged is in neither column), and the share closing above its own simple 20, 50 and
+        200-day moving average. Today's membership is applied to the whole history, which flatters the past
+        slightly, because stocks dropped from the index are usually ones that fell. The page refreshes
+        automatically after each US trading session.
+      </p>
+      <p>This describes market conditions only. It is not investment advice or a reason to buy or sell anything.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="brandfoot">
+  <div class="inner">
+    <span><b>XUMIT CAPITAL</b> &nbsp;·&nbsp; Portfolio advisory, global residency and international structuring</span>
+    <a href="https://xumitcapital.com/">xumitcapital.com →</a>
+  </div>
+</footer>
+
+<script>
+const DATA = /*__DATA__*/null;
+const $ = id => document.getElementById(id);
+/* ============================================================
+   Daily breadth (S&P 500) — DATA.daily
+   rows: [date, adv, dec, unch, ma20, ma50, ma200, close]
+   ============================================================ */
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const LONGM = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const dNice = d => { const [y,m,dd] = d.split("-"); return `${+dd} ${MONTHS[+m-1]} ${y}`; };
+const dShort = d => { const [y,m,dd] = d.split("-"); return `${+dd} ${MONTHS[+m-1]}`; };
+const fmtN = (v, dp) => v == null || !isFinite(v) ? "—" : v.toLocaleString("en-US", { minimumFractionDigits: dp, maximumFractionDigits: dp });
+const sgnPct = (v, dp=2) => v == null || !isFinite(v) ? "—" : (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(dp) + "%";
+const sgnInt = v => (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v);
+const med = a => { const s = a.filter(x => x != null && isFinite(x)).sort((x,y)=>x-y); if (!s.length) return null; const k = s.length >> 1; return s.length % 2 ? s[k] : (s[k-1]+s[k])/2; };
+const avgOf = a => { const s = a.filter(x => x != null && isFinite(x)); return s.length ? s.reduce((p,x)=>p+x,0)/s.length : null; };
+
+let dRows = [], dPeriod = null;
+
+function dailyRows(){
+  const D = DATA.daily; if (!D || !D.rows || !D.rows.length) return [];
+  return D.rows.map((r, i, all) => {
+    const prev = i ? all[i-1][7] : null;
+    return { d:r[0], adv:r[1], dec:r[2], unch:r[3], ma20:r[4], ma50:r[5], ma200:r[6], close:r[7],
+             net:r[1]-r[2], ad: r[2] ? r[1]/r[2] : null,
+             ret: prev ? (r[7]/prev - 1) * 100 : null };
+  });
+}
+
+function periods(all){
+  const ps = [];
+  const months = [...new Set(all.map(r => r.d.slice(0,7)))].reverse();
+  months.forEach((m, i) => {
+    const [y, mo] = m.split("-");
+    ps.push({ key:m, label: LONGM[+mo-1] + " " + y + (i === 0 ? " (month to date)" : ""), rows: all.filter(r => r.d.startsWith(m)) });
+    if (i === 0) {
+      ps.push({ key:"3m", label:"Last 3 months", rows: all.slice(-63) });
+      ps.push({ key:"12m", label:"Last 12 months", rows: all.slice(-250) });
+    }
+  });
+  return ps;
+}
+
+/* red → white → green against the period's own min / median / max */
+function heat(v, lo, mid, hi){
+  if (v == null || lo == null || hi == null || hi === lo) return "";
+  let t, col;
+  if (v >= mid) { t = hi === mid ? 0 : (v - mid) / (hi - mid); col = "var(--hm-hi)"; }
+  else          { t = mid === lo ? 0 : (mid - v) / (mid - lo); col = "var(--hm-lo)"; }
+  t = Math.max(0, Math.min(1, t));
+  return `background:color-mix(in srgb, ${col} ${Math.round(t*100)}%, var(--hm-mid))`;
+}
+
+function renderDailyTiles(rows){
+  const r = rows[rows.length-1];
+  const adAvg = avgOf(rows.map(x => x.ad));
+  const tiles = [
+    { lab:"Advancing / declining", val:`${r.adv} / ${r.dec}`, cls:"", note:`Net ${sgnInt(r.net)} on ${dShort(r.d)}` },
+    { lab:"A/D ratio", val:fmtN(r.ad, 2), cls: r.ad >= 1 ? "up" : "down", note:`Period average ${fmtN(adAvg, 2)}` },
+    { lab:"Above 20-day", val:fmtN(r.ma20, 1) + "%", cls:"", note:`Above 50-day ${fmtN(r.ma50, 1)}%` },
+    { lab:"Above 200-day", val:fmtN(r.ma200, 1) + "%", cls:"", note:"Long-term trend participation" },
+    { lab:"S&P 500", val:fmtN(r.close, 2), cls:"", note:`<span class="${r.ret>=0?"up":"down"}">${sgnPct(r.ret)}</span> on the day` },
+  ];
+  $("d-tiles").innerHTML = tiles.map(t => `<div class="tile"><div class="lab">${t.lab}</div><div class="val ${t.cls}">${t.val}</div><div class="note">${t.note}</div></div>`).join("");
+}
+
+function renderDailyTable(p){
+  const rows = p.rows;
+  const stat = k => { const v = rows.map(r => r[k]); const s = v.filter(x => x != null); return [Math.min(...s), med(v), Math.max(...s)]; };
+  const S = { ad:stat("ad"), ma20:stat("ma20"), ma50:stat("ma50"), ma200:stat("ma200") };
+  const hm = (k, v, txt) => `<td class="hm"><div class="cell" style="${heat(v, ...S[k])}">${txt}</div></td>`;
+  $("d-body").innerHTML = rows.map(r => `<tr>
+      <td><div class="cell">${dNice(r.d)}</div></td>
+      <td><div class="cell">${r.adv}</div></td>
+      <td><div class="cell">${r.dec}</div></td>
+      <td><div class="cell ${r.net>=0?"up":"down"}">${sgnInt(r.net)}</div></td>
+      ${hm("ad", r.ad, fmtN(r.ad, 2))}
+      ${hm("ma20", r.ma20, fmtN(r.ma20, 0) + "%")}
+      ${hm("ma50", r.ma50, fmtN(r.ma50, 0) + "%")}
+      ${hm("ma200", r.ma200, fmtN(r.ma200, 0) + "%")}
+      <td><div class="cell">${fmtN(r.close, 2)}</div></td>
+      <td><div class="cell ${r.ret==null?"":r.ret>=0?"up":"down"}">${sgnPct(r.ret)}</div></td>
+    </tr>`).join("");
+  const A = k => avgOf(rows.map(r => r[k]));
+  const first = rows[0], last = rows[rows.length-1];
+  const prevClose = (() => { const all = dRows; const i = all.findIndex(x => x.d === first.d); return i > 0 ? all[i-1].close : null; })();
+  const pRet = prevClose ? (last.close / prevClose - 1) * 100 : null;
+  const aNet = A("net"), aAd = A("ad");
+  $("d-foot").innerHTML = `<tr>
+      <td><div class="cell">Average</div></td>
+      <td><div class="cell">${fmtN(A("adv"), 0)}</div></td>
+      <td><div class="cell">${fmtN(A("dec"), 0)}</div></td>
+      <td><div class="cell ${aNet>=0?"avg-up":"avg-down"}">${sgnInt(Math.round(aNet))}</div></td>
+      <td><div class="cell ${aAd>=1?"avg-up":"avg-down"}">${fmtN(aAd, 2)}</div></td>
+      <td><div class="cell">${fmtN(A("ma20"), 0)}%</div></td>
+      <td><div class="cell">${fmtN(A("ma50"), 0)}%</div></td>
+      <td><div class="cell">${fmtN(A("ma200"), 0)}%</div></td>
+      <td><div class="cell" style="font-weight:400;color:var(--ink-3)">Period</div></td>
+      <td><div class="cell ${pRet==null?"":pRet>=0?"up":"down"}">${sgnPct(pRet)}</div></td>
+    </tr>`;
+  $("d-title").textContent = `${p.label} · ${rows.length} sessions`;
+}
+
+/* ---- line charts ---- */
+function lineChart(el, ro, rows, series, opt){
+  const W = 560, H = 230, L = 40, R = opt.right ? 40 : 12, T = 10, B = 26;
+  const iw = W - L - R, ih = H - T - B, n = rows.length;
+  const x = i => L + (n === 1 ? iw/2 : i * iw / (n - 1));
+  const lv = series.filter(s => !s.right).flatMap(s => rows.map(r => r[s.k])).filter(v => v != null);
+  let lo = opt.lo != null ? opt.lo : Math.min(...lv), hi = opt.hi != null ? opt.hi : Math.max(...lv);
+  if (opt.pad) { const st = opt.pad; lo = Math.max(opt.floor ?? -1e9, Math.floor(lo / st) * st); hi = Math.min(opt.ceil ?? 1e9, Math.ceil(hi / st) * st); }
+  if (hi === lo) hi = lo + 1;
+  const y = v => T + ih - (v - lo) * ih / (hi - lo);
+  let rlo, rhi, yr;
+  if (opt.right) {
+    const rv = series.filter(s => s.right).flatMap(s => rows.map(r => r[s.k])).filter(v => v != null && isFinite(v));
+    rlo = 0; rhi = Math.max(2, Math.ceil(Math.max(...rv) / 2) * 2);
+    yr = v => T + ih - (v - rlo) * ih / (rhi - rlo);
+  }
+  const ticks = 4, grid = [];
+  for (let k = 0; k <= ticks; k++) {
+    const v = lo + (hi - lo) * k / ticks, yy = y(v);
+    grid.push(`<line class="grid" x1="${L}" x2="${W-R}" y1="${yy.toFixed(1)}" y2="${yy.toFixed(1)}"/>`);
+    grid.push(`<text class="axl" x="${L-6}" y="${(yy+3.5).toFixed(1)}" text-anchor="end">${opt.fmtL(v)}</text>`);
+    if (opt.right) grid.push(`<text class="axl" x="${W-R+6}" y="${(yy+3.5).toFixed(1)}">${(rlo + (rhi - rlo) * k / ticks).toFixed(1)}</text>`);
+  }
+  const step = Math.max(1, Math.ceil(n / 6));
+  for (let i = 0; i < n; i += step) grid.push(`<text class="axl" x="${x(i).toFixed(1)}" y="${H-8}" text-anchor="middle">${dShort(rows[i].d)}</text>`);
+  if (opt.right) { const y1 = yr(1); grid.push(`<line x1="${L}" x2="${W-R}" y1="${y1.toFixed(1)}" y2="${y1.toFixed(1)}" stroke="var(--c-ratio)" stroke-width="1" stroke-opacity=".35"/>`); }
+  const paths = series.map(s => {
+    const yy = s.right ? yr : y;
+    let d = "", pen = false;
+    rows.forEach((r, i) => { const v = r[s.k]; if (v == null || !isFinite(v)) { pen = false; return; } d += (pen ? "L" : "M") + x(i).toFixed(1) + " " + yy(v).toFixed(1); pen = true; });
+    return `<path d="${d}" fill="none" stroke="${s.c}" stroke-width="${s.w || 1.8}" ${s.dash ? 'stroke-dasharray="5 4"' : ""} stroke-linejoin="round"/>` +
+      (n <= 31 ? rows.map((r, i) => r[s.k] == null ? "" : `<circle cx="${x(i).toFixed(1)}" cy="${yy(r[s.k]).toFixed(1)}" r="2.2" fill="${s.c}"/>`).join("") : "");
+  }).join("");
+  el.innerHTML = `<svg class="ch" viewBox="0 0 ${W} ${H}" role="img" aria-label="${opt.label}">${grid.join("")}${paths}
+    <line class="cross" x1="0" x2="0" y1="${T}" y2="${T+ih}" visibility="hidden"/>
+    <rect x="${L}" y="${T}" width="${iw}" height="${ih}" fill="transparent"/></svg>`;
+  const svg = el.querySelector("svg"), cross = svg.querySelector(".cross");
+  const rest = opt.rest(rows[n-1]);
+  ro.textContent = rest;
+  const move = ev => {
+    const b = svg.getBoundingClientRect(), fx = (ev.clientX - b.left) / b.width * W;
+    const i = Math.max(0, Math.min(n - 1, Math.round((fx - L) / (iw / Math.max(1, n - 1)))));
+    cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("visibility", "visible");
+    ro.textContent = opt.rest(rows[i]);
+  };
+  svg.addEventListener("pointermove", move); svg.addEventListener("pointerdown", move);
+  svg.addEventListener("pointerleave", () => { cross.setAttribute("visibility", "hidden"); ro.textContent = rest; });
+}
+
+function renderDailyCharts(rows){
+  lineChart($("ch-ad"), $("ro-ad"), rows,
+    [{ k:"adv", c:"var(--c-adv)" }, { k:"dec", c:"var(--c-dec)" }, { k:"ad", c:"var(--c-ratio)", right:true, dash:true, w:1.6 }],
+    { lo:0, pad:100, ceil:DATA.daily.members, right:true, fmtL: v => Math.round(v), label:"Advancing and declining stocks",
+      rest: r => `${dNice(r.d)} · up ${r.adv} · down ${r.dec} · A/D ${fmtN(r.ad, 2)}` });
+  lineChart($("ch-ma"), $("ro-ma"), rows,
+    [{ k:"ma20", c:"var(--c-ma20)" }, { k:"ma50", c:"var(--c-ma50)" }, { k:"ma200", c:"var(--c-ma200)" }],
+    { pad:10, floor:0, ceil:100, fmtL: v => Math.round(v) + "%", label:"Share of S&P 500 above moving averages",
+      rest: r => `${dNice(r.d)} · 20d ${fmtN(r.ma20, 1)}% · 50d ${fmtN(r.ma50, 1)}% · 200d ${fmtN(r.ma200, 1)}%` });
+}
+
+function renderDaily(){
+  const p = periods(dRows).find(x => x.key === dPeriod);
+  if (!p || !p.rows.length) return;
+  renderDailyTiles(p.rows);
+  renderDailyCharts(p.rows);
+  renderDailyTable(p);
+}
+
+function initDaily(){
+  dRows = dailyRows();
+  if (!dRows.length) { $("daily-section").hidden = true; return; }
+  const ps = periods(dRows);
+  dPeriod = ps[0].key;
+  // A month only a day or two old reads poorly on its own: start on the last 3 months then.
+  if (ps[0].rows.length < 5) dPeriod = "3m";
+  $("d-period").innerHTML = ps.map(p => `<option value="${p.key}"${p.key === dPeriod ? " selected" : ""}>${p.label}</option>`).join("");
+  $("d-period").addEventListener("change", e => { dPeriod = e.target.value; renderDaily(); });
+  $("d-dmeta").textContent = `${DATA.daily.universe} · ${DATA.daily.members} stocks · ${dRows.length} sessions to ${dNice(dRows[dRows.length-1].d)}`;
+  $("d-copy").addEventListener("click", async () => {
+    const p = periods(dRows).find(x => x.key === dPeriod);
+    const lines = ["Date,Advancing,Declining,Unchanged,Net advance,A/D ratio,% above 20 DMA,% above 50 DMA,% above 200 DMA,S&P 500,Return %"];
+    p.rows.forEach(r => lines.push([r.d, r.adv, r.dec, r.unch, r.net, r.ad == null ? "" : r.ad.toFixed(3), r.ma20, r.ma50, r.ma200, r.close, r.ret == null ? "" : r.ret.toFixed(3)].join(",")));
+    const btn = $("d-copy");
+    try { await navigator.clipboard.writeText(lines.join("\n")); btn.textContent = "Copied"; }
+    catch (e) { btn.textContent = "Copy blocked"; }
+    setTimeout(() => { btn.textContent = "Copy CSV"; }, 2200);
+  });
+  renderDaily();
+}
+
+
+(function(){
+  if (!DATA || !DATA.daily) { $("m-asof").textContent = "No data"; return; }
+  const r = DATA.daily.rows;
+  $("m-asof").textContent = dNice(r[r.length-1][0]);
+  $("m-universe").textContent = DATA.daily.universe + " · " + DATA.daily.members + " stocks";
+  $("m-updated").textContent = DATA.updated || "—";
+  initDaily();
+})();
+</script>
+</body>
+</html>

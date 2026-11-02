@@ -15,6 +15,10 @@ Public dashboards for Indian equities, built from the daily NSE bhavcopy.
   daily Nifty 500 advance/decline and moving-average breadth, and the distribution of
   returns and drawdowns across liquid NSE stocks. Built in `xumit/markets-data` with the
   evening update.
+- `us-breadth/` — **US Breadth Monitor** (tools.xumitcapital.com/us-breadth/): daily S&P 500
+  advance/decline and moving-average breadth. Rebuilt by `.github/workflows/us-breadth.yml`
+  after each US session from Wikipedia's member list and Yahoo Finance closes
+  (`us-breadth/build.py`).
 - `us-conditions.html` — **US Conditions Readout** (tools.xumitcapital.com/us-conditions.html):
   six systemic US measures (breadth, credit, copper vs gold, dollar, VIX term structure,
   10-year Treasury yield volatility) scored against their own past year, plus credit

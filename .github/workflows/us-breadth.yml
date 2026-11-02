@@ -1,0 +1,48 @@
+name: US Breadth Monitor
+
+on:
+  schedule:
+    # 22:35 UTC, Monday to Friday: after the US close in both summer (20:00 UTC)
+    # and winter (21:00 UTC) time. 4:05 am India time the next morning.
+    - cron: "35 22 * * 1-5"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "us-breadth/build.py"
+      - "us-breadth/template.html"
+      - ".github/workflows/us-breadth.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: us-breadth
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: pip install --quiet yfinance pandas numpy lxml requests
+      - name: Build
+        run: python3 us-breadth/build.py
+      - name: Publish
+        run: |
+          git config user.name "xumit-breadth-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add us-breadth/data.json us-breadth/index.html
+          if git diff --cached --quiet; then echo "nothing new"; exit 0; fi
+          d=$(python3 -c "import json;print(json.load(open('us-breadth/data.json'))['rows'][-1][0])")
+          git commit -m "Update US Breadth Monitor to $d close"
+          for i in 1 2 3; do
+            git pull --rebase --quiet origin main && git push --quiet origin HEAD:main && exit 0
+            sleep 10
+          done
+          exit 1
