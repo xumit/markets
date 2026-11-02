@@ -347,7 +347,7 @@ function periods(all){
   const months = [...new Set(all.map(r => r.d.slice(0,7)))].reverse();
   months.forEach((m, i) => {
     const [y, mo] = m.split("-");
-    ps.push({ key:m, label: LONGM[+mo-1] + " " + y + (i === 0 ? " (month to date)" : ""), rows: all.filter(r => r.d.startsWith(m)) });
+    ps.push({ key:m, label: LONGM[+mo-1] + " " + y + (i === 0 && m === new Date().toISOString().slice(0,7) ? " (month to date)" : ""), rows: all.filter(r => r.d.startsWith(m)) });
     if (i === 0) {
       ps.push({ key:"3m", label:"Last 3 months", rows: all.slice(-63) });
       ps.push({ key:"12m", label:"Last 12 months", rows: all.slice(-250) });
