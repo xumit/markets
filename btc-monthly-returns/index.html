@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>XC Bitcoin Monthly Returns</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* Plan: a plain, data-first reference table. Light and dark palettes; neutral surfaces, colour used only for gains and losses. */
+:root {
+  --bg: #f6f5f1; --surface: #ffffff; --ink: #1b1f24; --muted: #5b6470;
+  --line: #e2e0d8; --accent: #1f3864; --pos: #1e7a46; --neg: #b3261e;
+  --font-body: "Source Sans 3", Arial, Helvetica, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121417; --surface: #1a1d21; --ink: #e8e9eb; --muted: #9aa3ad;
+    --line: #2c3137; --accent: #8fb3e8; --pos: #5cc286; --neg: #f07a70;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121417; --surface: #1a1d21; --ink: #e8e9eb; --muted: #9aa3ad;
+  --line: #2c3137; --accent: #8fb3e8; --pos: #5cc286; --neg: #f07a70;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 15px; line-height: 1.5;
+  padding: 0 16px 48px;
+}
+main { max-width: 1120px; margin: 0 auto; }
+header { padding: 28px 0 12px; border-bottom: 1px solid var(--line); }
+h1 { font-size: 26px; margin: 0 0 4px; font-weight: 700; color: var(--accent); }
+.sub { color: var(--muted); margin: 0; font-size: 14px; }
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 8px; }
+.tab {
+  font: inherit; font-weight: 600; padding: 8px 14px; border-radius: 6px;
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer;
+}
+.tab[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.intro { color: var(--muted); font-size: 14px; margin: 8px 0 16px; max-width: 70ch; }
+h2 { font-size: 18px; margin: 32px 0 10px; color: var(--ink); font-weight: 700; }
+.scroll { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+caption { text-align: left; padding: 10px 12px; color: var(--muted); font-size: 13px; }
+th, td { padding: 6px 8px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--line); }
+th { font-weight: 600; color: var(--muted); font-size: 13px; background: var(--surface); }
+th:first-child, td:first-child { text-align: left; position: sticky; left: 0; background: var(--surface); }
+td.allm { font-weight: 700; border-left: 2px solid var(--line); }
+tr.mean td { font-weight: 700; }
+.empty { color: var(--muted); }
+.pos { color: var(--pos); font-weight: 600; }
+.neg { color: var(--neg); font-weight: 600; }
+.group-title { font-weight: 700; color: var(--accent); padding: 10px 12px 0; font-size: 15px; }
+.notes { margin-top: 28px; color: var(--muted); font-size: 13px; max-width: 80ch; }
+.notes ul { padding-left: 18px; margin: 6px 0; }
+.legend { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); margin: 6px 0 10px; }
+.swatch { display: inline-block; width: 14px; height: 14px; border-radius: 3px; vertical-align: middle; }
+@media (max-width: 480px) { h1 { font-size: 22px; } body { font-size: 14px; } }
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>XC Bitcoin Monthly Returns</h1>
+  <p class="sub">Month-end close to month-end close, USD. Data through 31 October 2026.</p>
+</header>
+
+<div class="tabs" role="tablist" aria-label="Period">
+  <button class="tab" role="tab" id="t-all" aria-controls="panel" aria-selected="true" data-w="all">All Data</button>
+  <button class="tab" role="tab" id="t-ten" aria-controls="panel" aria-selected="false" data-w="ten">Last 10 Years</button>
+  <button class="tab" role="tab" id="t-five" aria-controls="panel" aria-selected="false" data-w="five">Last 5 Years</button>
+</div>
+
+<div id="panel" role="tabpanel" aria-labelledby="t-all">
+  <p class="intro" id="intro"></p>
+
+  <div class="legend">
+    <span class="swatch" style="background:var(--neg)"></span> loss
+    <span class="swatch" style="background:var(--pos)"></span> gain
+    <span>Green = gain, red = loss.</span>
+  </div>
+
+  <div class="scroll"><table id="grid"></table></div>
+
+  <h2>Statistics by month</h2>
+  <div id="stats"></div>
+
+  <div class="notes">
+    <ul>
+      <li>Each return is the month-end close divided by the prior month-end close, minus one.</li>
+      <li>2010 shows August to December only. November 2026 is excluded because the price data ends on 1 November.</li>
+      <li>SD is the population standard deviation. P (+) is the share of months with a return above zero. Range H and L are the mean plus and minus one SD.</li>
+      <li>Election Years: 2012, 2016, 2020, 2024. Post-Election Years: 2013, 2017, 2021, 2025. Midterm Years: 2014, 2018, 2022, 2026. Pre-Election Years: 2011, 2015, 2019, 2023.</li>
+      <li>Historical statistics for information only. Past performance is not a reliable guide to future returns. Not investment advice.</li>
+    </ul>
+  </div>
+</div>
+</main>
+
+<script>
+const DATA = {"2010": [null, null, null, null, null, null, null, -0.115696, 0.031667, 2.109855, 0.081558, 0.440922], "2011": [0.833333, 0.563636, -0.087663, 3.460815, 1.497429, 0.842007, -0.170858, -0.385804, -0.373122, -0.368103, -0.085563, 0.589852], "2012": [0.161323, -0.11375, 0.010025, 0.008224, 0.046677, 0.291476, 0.39761, 0.086631, 0.220472, -0.096694, 0.121775, 0.07521], "2013": [0.510732, 0.635472, 1.786999, 0.496581, -0.074783, -0.243024, 0.089241, 0.327535, 0.006358, 0.488207, 4.710054, -0.386897], "2014": [0.089195, -0.316963, -0.169102, -0.01744, 0.394615, 0.023283, -0.094867, -0.17619, -0.190055, -0.129664, 0.127872, -0.151597], "2015": [-0.330437, 0.184893, -0.043762, -0.034354, -0.031384, 0.149497, 0.082011, -0.186676, 0.022217, 0.336209, 0.192658, 0.138346], "2016": [-0.148012, 0.201001, -0.052325, 0.073506, 0.188289, 0.266113, -0.070982, -0.080769, 0.062517, 0.144372, 0.063988, 0.307243], "2017": [-0.001721, 0.228776, -0.092028, 0.260173, 0.687966, 0.068014, 0.166814, 0.653717, -0.085218, 0.485753, 0.548002, 0.393236], "2018": [-0.271633, 0.018882, -0.328388, 0.33533, -0.190024, -0.146986, 0.209738, -0.091849, -0.064232, -0.039678, -0.370098, -0.070314], "2019": [-0.076042, 0.11156, 0.07994, 0.286727, 0.621121, 0.258976, -0.062237, -0.048052, -0.135106, 0.102215, -0.174557, -0.051337], "2020": [0.30223, -0.086403, -0.246603, 0.343071, 0.095158, -0.03333, 0.243055, 0.026703, -0.075324, 0.281158, 0.427208, 0.470377], "2021": [0.143485, 0.365129, 0.299623, -0.017079, -0.354402, -0.060774, 0.184148, 0.136087, -0.070401, 0.400159, -0.070787, -0.189755], "2022": [-0.166608, 0.12182, 0.054134, -0.173043, -0.155992, -0.372173, 0.168733, -0.13991, -0.031305, 0.05507, -0.162374, -0.037217], "2023": [0.399502, 0.000165, 0.230801, 0.027133, -0.069368, 0.119697, -0.040591, -0.112811, 0.03963, 0.285147, 0.088367, 0.120749], "2024": [0.006733, 0.437071, 0.166019, -0.149265, 0.112606, -0.070874, 0.030659, -0.087094, 0.073485, 0.108789, 0.373302, -0.031105], "2025": [0.095848, -0.176025, -0.021665, 0.141126, 0.110742, 0.024147, 0.080521, -0.064883, 0.053004, -0.038728, -0.175477, -0.031323], "2026": [-0.101311, -0.148564, 0.018398, 0.11861, -0.035478, -0.204552, 0.073223, 0.250449, 0.063539, -0.073022, null, null]};
+
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const GROUPS = [
+  { name: 'Election Years', years: [2012, 2016, 2020, 2024] },
+  { name: 'Post-Election Years', years: [2013, 2017, 2021, 2025] },
+  { name: 'Midterm Years', years: [2014, 2018, 2022, 2026] },
+  { name: 'Pre-Election Years', years: [2011, 2015, 2019, 2023] }
+];
+const WINDOWS = {
+  all:  { from: 2010, to: 2026, label: 'All Data',       intro: 'Every month from August 2010 to October 2026.' },
+  ten:  { from: 2017, to: 2026, label: 'Last 10 Years',  intro: 'The ten most recent calendar years, 2017 to 2026 (2026 year-to-date).' },
+  five: { from: 2022, to: 2026, label: 'Last 5 Years',   intro: 'The five most recent calendar years, 2022 to 2026 (2026 year-to-date).' }
+};
+
+function cssVar(name) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+function hexToRgb(hex) {
+  const h = hex.replace('#', '');
+  return [0, 2, 4].map(i => parseInt(h.substr(i, 2), 16));
+}
+function heatColour(v, lo, hi) {
+  if (v === null || v === undefined) return '';
+  const surface = hexToRgb(cssVar('--surface') || '#ffffff');
+  const target = hexToRgb(v < 0 ? cssVar('--neg') : cssVar('--pos'));
+  const t = v < 0 ? Math.min(1, v / lo) : Math.min(1, v / hi);
+  const k = 0.85 * t;
+  const mix = surface.map((s, i) => Math.round(s * (1 - k) + target[i] * k));
+  return `rgb(${mix[0]}, ${mix[1]}, ${mix[2]})`;
+}
+function pct(v) {
+  if (v === null || v === undefined || Number.isNaN(v)) return '<span class="empty">–</span>';
+  const s = (Math.abs(v) * 100).toFixed(1) + '%';
+  if (v < 0) return `<span class="neg">(${s})</span>`;
+  if (v > 0) return `<span class="pos">${s}</span>`;
+  return s;
+}
+function prob(v) {
+  if (v === null || v === undefined || Number.isNaN(v)) return '<span class="empty">–</span>';
+  return Math.round(v * 100) + '%';
+}
+function yearsIn(w) {
+  return Object.keys(DATA).map(Number).filter(y => y >= w.from && y <= w.to).sort((a, b) => a - b);
+}
+function stats(vals) {
+  const n = vals.length;
+  if (n === 0) return null;
+  const s = vals.slice().sort((a, b) => a - b);
+  const mean = vals.reduce((a, b) => a + b, 0) / n;
+  const med = n % 2 ? s[(n - 1) / 2] : (s[n / 2 - 1] + s[n / 2]) / 2;
+  const sd = Math.sqrt(vals.reduce((a, v) => a + (v - mean) ** 2, 0) / n);
+  return {
+    Mean: mean, Median: med, Max: s[n - 1], Min: s[0], SD: sd,
+    'P (+)': vals.filter(v => v > 0).length / n,
+    'Range (H)': mean + sd, 'Range (L)': mean - sd
+  };
+}
+function cellsOf(years, m) {
+  return years.map(y => DATA[y][m]).filter(v => v !== null && v !== undefined);
+}
+function allCellsOf(years) {
+  return years.flatMap(y => DATA[y].filter(v => v !== null && v !== undefined));
+}
+
+function renderGrid(years) {
+  let lo = 0, hi = 0;
+  years.forEach(y => DATA[y].forEach(v => { if (v !== null) { lo = Math.min(lo, v); hi = Math.max(hi, v); } }));
+  if (lo === 0) lo = -1e-9;
+  if (hi === 0) hi = 1e-9;
+  let html = '<caption>Monthly returns by calendar year</caption><thead><tr><th scope="col">Year</th>';
+  MONTHS.forEach(m => html += `<th scope="col">${m}</th>`);
+  html += '</tr></thead><tbody>';
+  years.forEach(y => {
+    html += `<tr><th scope="row" style="position:sticky;left:0;background:var(--surface);text-align:left">${y}</th>`;
+    DATA[y].forEach(v => {
+      if (v === null) html += '<td></td>';
+      else html += `<td>${pct(v)}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody>';
+  document.getElementById('grid').innerHTML = html;
+}
+
+function block(name, years) {
+  const cols = MONTHS.map((_, m) => stats(cellsOf(years, m)));
+  const all = stats(allCellsOf(years));
+  const rows = ['Mean', 'Median', 'Max', 'Min', 'SD', 'P (+)', 'Range (H)', 'Range (L)'];
+  let html = `<div class="group-title">${name} (${years.join(', ')})</div>`;
+  html += '<table><thead><tr><th scope="col">Statistic</th>';
+  MONTHS.forEach(m => html += `<th scope="col">${m}</th>`);
+  html += '<th scope="col">All Months</th></tr></thead><tbody>';
+  rows.forEach(r => {
+    html += `<tr class="${r === 'Mean' ? 'mean' : ''}"><th scope="row" style="position:sticky;left:0;background:var(--surface);text-align:left">${r}</th>`;
+    cols.forEach(c => {
+      const v = c ? c[r] : null;
+      html += `<td>${r === 'P (+)' ? prob(v) : pct(v)}</td>`;
+    });
+    const va = all ? all[r] : null;
+    html += `<td class="allm">${r === 'P (+)' ? prob(va) : pct(va)}</td></tr>`;
+  });
+  html += '</tbody></table>';
+  return html;
+}
+
+function renderStats(w, years) {
+  let html = '<div class="scroll">';
+  html += block(`All Years (${w.from}–${w.to})`, years);
+  GROUPS.forEach(g => {
+    const members = g.years.filter(y => years.includes(y));
+    if (members.length) html += block(g.name, members);
+  });
+  html += '</div>';
+  const small = GROUPS.map(g => g.years.filter(y => years.includes(y)))
+                      .filter(m => m.length && m.length <= 2);
+  if (small.length) {
+    html += `<p class="notes">Some groups in this window contain only one or two years, so their SD and P (+) rest on a small sample.</p>`;
+  }
+  document.getElementById('stats').innerHTML = html;
+}
+
+function show(key) {
+  const w = WINDOWS[key];
+  const years = yearsIn(w);
+  document.querySelectorAll('.tab').forEach(t => {
+    t.setAttribute('aria-selected', String(t.dataset.w === key));
+  });
+  document.getElementById('panel').setAttribute('aria-labelledby', 't-' + ({ all: 'all', ten: 'ten', five: 'five' })[key]);
+  document.getElementById('intro').textContent = w.intro;
+  renderGrid(years);
+  renderStats(w, years);
+}
+
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => show(t.dataset.w));
+});
+show('all');
+</script>
+</body>
+</html>
