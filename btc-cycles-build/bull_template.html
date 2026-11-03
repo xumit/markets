@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bitcoin Bull Cycles</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23202A35'/><text x='16' y='22' text-anchor='middle' font-family='Montserrat,Arial,sans-serif' font-weight='800' font-size='15' fill='%23D89B2B'>XC</text></svg>">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* Plan: Xumit Capital brand. One log-scale chart with clickable legend and average options; a summary table of the six bull cycles. */
+:root {
+  --navy: #202A35; --gold: #D89B2B;
+  --bg: #F5F7FA; --surface: #FFFFFF; --ink: #202A35; --muted: #5B6A7A;
+  --line: #DDE3EA; --accent: #202A35; --pos: #1E7A46; --neg: #B3261E;
+  --grid: #E3E8EE;
+  --font-head: "Montserrat", Arial, Helvetica, sans-serif;
+  --font-body: "Source Sans 3", Arial, Helvetica, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #161D25; --surface: #202A35; --ink: #E6EBF1; --muted: #93A0AE;
+    --line: #2C3846; --accent: #D89B2B; --pos: #5CC286; --neg: #F07A70; --grid: #2C3846;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #161D25; --surface: #202A35; --ink: #E6EBF1; --muted: #93A0AE;
+  --line: #2C3846; --accent: #D89B2B; --pos: #5CC286; --neg: #F07A70; --grid: #2C3846;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 15px; line-height: 1.5;
+  padding: 0 16px 48px;
+}
+main { max-width: 1120px; margin: 0 auto; }
+.brand { background: var(--navy); border-bottom: 3px solid var(--gold); margin: 0 -16px; padding: 18px 16px; }
+.brand-inner { max-width: 1120px; margin: 0 auto; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.logo { height: 64px; width: auto; display: block; }
+.brand h1 { font-family: var(--font-head); color: #FFFFFF; font-size: 24px; font-weight: 800; margin: 0; }
+.brand .sub { color: #BFC9D4; margin: 2px 0 0; font-size: 14px; }
+h2 { font-family: var(--font-head); font-size: 18px; margin: 28px 0 10px; font-weight: 700; }
+.intro { color: var(--muted); font-size: 14px; max-width: 74ch; margin: 16px 0 10px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px; }
+.chart-card { background: var(--navy); border-color: var(--navy); position: relative; --grid: #2C3846; --muted: #BFC9D4; }
+.options { display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: center; color: #FFFFFF; font-size: 14px; margin: 2px 4px 12px; }
+.options fieldset { border: 0; margin: 0; padding: 0; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.options legend { font-family: var(--font-head); font-size: 13px; font-weight: 600; padding: 0; margin-right: 8px; color: #BFC9D4; }
+.options label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+.options input { accent-color: var(--gold); width: 16px; height: 16px; cursor: pointer; }
+.options input:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 12px; }
+.toggle {
+  font: inherit; font-family: var(--font-head); font-weight: 600; font-size: 13px;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 7px 12px; border-radius: 6px; border: 1px solid #FFFFFF;
+  background: #FFFFFF; color: #202A35; cursor: pointer;
+}
+.toggle .dot { width: 14px; height: 4px; border-radius: 2px; display: inline-block; box-shadow: 0 0 0 1px #202A35; }
+.toggle[aria-pressed="false"] { background: #3A4757; color: #BFC9D4; border-color: #3A4757; }
+.toggle:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+svg { width: 100%; height: auto; display: block; }
+.axis-label { font-size: 12px; fill: var(--muted); font-family: var(--font-body); }
+.tick { font-size: 11px; fill: var(--muted); font-family: var(--font-body); }
+.tip {
+  position: absolute; display: none; pointer-events: none; z-index: 2;
+  background: #FFFFFF; color: #202A35; border: 1px solid var(--gold); border-radius: 6px;
+  padding: 8px 10px; font-size: 13px; min-width: 250px; box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+.tip strong { font-family: var(--font-head); font-size: 13px; }
+.tip .row { display: flex; align-items: center; gap: 8px; margin-top: 3px; white-space: nowrap; }
+.tip .dot { width: 12px; height: 4px; border-radius: 2px; display: inline-block; flex: none; box-shadow: 0 0 0 1px #202A35; }
+.tip .val { margin-left: auto; font-variant-numeric: tabular-nums; padding-left: 12px; }
+.tip .dt { color: var(--muted); font-size: 12px; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+th, td { padding: 8px 10px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { font-family: var(--font-head); font-size: 12px; color: var(--muted); font-weight: 600; }
+th:first-child, td:first-child { text-align: left; }
+.scroll { overflow-x: auto; }
+.status-ongoing { color: var(--gold); font-weight: 600; }
+.notes { margin-top: 24px; color: var(--muted); font-size: 13px; max-width: 80ch; }
+.notes ul { padding-left: 18px; margin: 6px 0; }
+@media (max-width: 480px) { .brand h1 { font-size: 20px; } body { font-size: 14px; } }
+</style>
+</head>
+<body>
+<header class="brand">
+  <div class="brand-inner">
+    <img class="logo" alt="Xumit Capital" src="data:image/png;base64,/*LOGO*/">
+    <div>
+      <h1>Bitcoin Bull Cycles</h1>
+      <p class="sub">Each bull cycle from its starting close, rebased to 1.00. Log scale. Prices in USD. Data through /*ASOFDATE*/.</p>
+    </div>
+  </div>
+</header>
+<main>
+  <p class="intro">Each line is one bull cycle. Click a cycle name to hide or show its line. Bull Cycle 6 is still running, so it is shown but kept out of the average. The average uses Bull Cycles 2 to 5 by default. You can switch between the median and the mean, and add Bull Cycle 1, which started when the market was very thin.</p>
+
+  <div class="card chart-card">
+    <div class="options" role="group" aria-label="Average options">
+      <fieldset>
+        <legend>Average</legend>
+        <label><input type="radio" name="stat" value="median" checked> Median</label>
+        <label><input type="radio" name="stat" value="mean"> Mean</label>
+      </fieldset>
+      <label><input type="checkbox" id="inc1"> Include Bull Cycle 1 in average</label>
+    </div>
+    <div class="legend" id="legend" role="group" aria-label="Show or hide cycles"></div>
+    <div class="scroll" style="position:relative"><svg id="chart" viewBox="0 0 900 460" role="img" aria-label="Bitcoin bull cycles on a log scale, rebased to 1.00"></svg></div>
+    <div class="tip" id="tip"></div>
+  </div>
+
+  <h2>Cycle summary</h2>
+  <div class="card scroll">
+    <table id="summary">
+      <thead>
+        <tr>
+          <th scope="col">Cycle</th><th scope="col">From</th><th scope="col">To</th><th scope="col">Days</th>
+          <th scope="col">Start close</th><th scope="col">Peak close</th><th scope="col">Peak on</th>
+          <th scope="col">Peak vs start</th><th scope="col">Status</th><th scope="col">In average</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="notes">
+    <ul>
+      <li>Cycle dates are the agreed windows. Each line is the daily close divided by the close on the first day of its cycle.</li>
+      <li>Peak vs start is the highest close in the cycle divided by its first close.</li>
+      <li>Bull Cycle 1 starts when Bitcoin traded below one cent with very little volume, so it is excluded from the average by default.</li>
+      <li>Bull Cycle 6 is still running. It is shown but excluded from the average.</li>
+      <li>Historical figures for information only. Past performance is not a reliable guide to future returns. Not investment advice.</li>
+    </ul>
+  </div>
+</main>
+
+<script>
+const DATA = /*DATA*/;
+const COLOURS = ['#4285F4', '#EA4335', '#FBBC04', '#34A853', '#FFFFFF', '#B8A1F0'];
+const AVG_COLOUR = '#46BDC6';
+
+const W = 900, H = 460, PAD = { l: 78, r: 150, t: 20, b: 52 };
+const plotW = W - PAD.l - PAD.r, plotH = H - PAD.t - PAD.b;
+const Y_MIN = 0.5, Y_MAX = 100000;
+const LOG_MIN = Math.log10(Y_MIN), LOG_MAX = Math.log10(Y_MAX);
+
+const cycles = DATA.cycles;
+const maxDays = Math.max(...cycles.map(c => c.series.length));
+
+const x = d => PAD.l + (d - 1) / (maxDays - 1) * plotW;
+const y = v => PAD.t + (LOG_MAX - Math.log10(v)) / (LOG_MAX - LOG_MIN) * plotH;
+
+const lines = cycles.map((c, k) => ({ key: 'c' + k, label: c.name, colour: COLOURS[k], values: c.series, width: 2, visible: true, inAvg: k <= 4 }));
+const avgLine = { key: 'avg', label: '', colour: AVG_COLOUR, values: [], width: 4, visible: true };
+
+function statOf(vals, stat) {
+  const s = vals.slice().sort((a, b) => a - b);
+  if (stat === 'mean') return vals.reduce((a, b) => a + b, 0) / vals.length;
+  const n = s.length;
+  return n % 2 ? s[(n - 1) / 2] : (s[n / 2 - 1] + s[n / 2]) / 2;
+}
+
+function currentStat() {
+  return document.querySelector('input[name="stat"]:checked').value;
+}
+function includeBull1() {
+  return document.getElementById('inc1').checked;
+}
+function avgCycles() {
+  return lines.filter((l, idx) => l.inAvg && (idx !== 0 || includeBull1()));
+}
+function computeAverage() {
+  const set = avgCycles();
+  const stat = currentStat();
+  const out = [];
+  for (let i = 0; i < maxDays; i++) {
+    const vals = set.map(l => l.values[i]).filter(v => v !== undefined);
+    out.push(vals.length ? statOf(vals, stat) : undefined);
+  }
+  avgLine.values = out;
+  avgLine.label = (stat === 'mean' ? 'Mean' : 'Median') + (includeBull1() ? ' (Bulls 1–5)' : ' (Bulls 2–5)');
+  return out;
+}
+
+function el(tag, attrs, parent) {
+  const n = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
+  if (parent) parent.appendChild(n);
+  return n;
+}
+
+const svg = document.getElementById('chart');
+const paths = {};
+
+function drawAxes() {
+  [1, 10, 100, 1000, 10000, 100000].forEach(v => {
+    el('line', { x1: PAD.l, x2: PAD.l + plotW, y1: y(v), y2: y(v), stroke: 'var(--grid)', 'stroke-width': 1 }, svg);
+    const t = el('text', { x: PAD.l - 8, y: y(v) + 4, 'text-anchor': 'end', class: 'tick' }, svg);
+    t.textContent = v.toLocaleString('en-US') + 'x';
+  });
+  for (let d = 1; d <= maxDays; d += 100) {
+    const t = el('text', { x: x(d), y: PAD.t + plotH + 18, 'text-anchor': 'middle', class: 'tick' }, svg);
+    t.textContent = d;
+  }
+  el('line', { x1: PAD.l, x2: PAD.l + plotW, y1: PAD.t + plotH, y2: PAD.t + plotH, stroke: 'var(--muted)', 'stroke-width': 1 }, svg);
+  const xl = el('text', { x: PAD.l + plotW / 2, y: H - 10, 'text-anchor': 'middle', class: 'axis-label' }, svg);
+  xl.textContent = 'Days from cycle start';
+  const cy = PAD.t + plotH / 2;
+  const yl = el('text', { x: 18, y: cy, 'text-anchor': 'middle', class: 'axis-label', transform: `rotate(-90 18 ${cy})` }, svg);
+  yl.textContent = 'Price relative to cycle start (x, log scale)';
+}
+
+function pathFor(values) {
+  let d = '';
+  values.forEach((v, i) => {
+    if (v === undefined || v === null || !(v > 0)) return;
+    d += (d ? 'L' : 'M') + x(i + 1).toFixed(1) + ' ' + y(v).toFixed(1);
+  });
+  return d;
+}
+
+function drawLines() {
+  lines.forEach(line => {
+    paths[line.key] = el('path', { d: pathFor(line.values), fill: 'none', stroke: line.colour, 'stroke-width': line.width, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, svg);
+  });
+  paths.avg = el('path', { d: '', fill: 'none', stroke: AVG_COLOUR, 'stroke-width': 4, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, svg);
+}
+
+function refreshAverage() {
+  computeAverage();
+  paths.avg.setAttribute('d', pathFor(avgLine.values));
+  const btn = document.getElementById('btn-avg');
+  if (btn) btn.querySelector('.label').textContent = avgLine.label;
+  renderSummaryInAverage();
+}
+
+function setVisible(line, on) {
+  line.visible = on;
+  paths[line.key].setAttribute('display', on ? 'inline' : 'none');
+  document.getElementById('btn-' + line.key).setAttribute('aria-pressed', String(on));
+}
+
+function buildLegend() {
+  const legend = document.getElementById('legend');
+  const add = (line, label) => {
+    const b = document.createElement('button');
+    b.className = 'toggle';
+    b.id = 'btn-' + line.key;
+    b.type = 'button';
+    b.setAttribute('aria-pressed', 'true');
+    b.innerHTML = `<span class="dot" style="background:${line.colour}"></span><span class="label">${label}</span>`;
+    b.addEventListener('click', () => setVisible(line, !line.visible));
+    legend.appendChild(b);
+  };
+  lines.forEach(line => add(line, line.label));
+  add(avgLine, '');
+}
+
+function fmtDate(s) {
+  return new Date(s + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+}
+function fmtX(v) {
+  return v >= 100 ? Math.round(v).toLocaleString('en-US') + 'x' : v.toFixed(2) + 'x';
+}
+
+function buildSummary() {
+  const tbody = document.querySelector('#summary tbody');
+  const fmt = n => n < 1 ? n.toLocaleString('en-US', { maximumFractionDigits: 4, minimumFractionDigits: 4 }) : n.toLocaleString('en-US', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
+  cycles.forEach((c, k) => {
+    const tr = document.createElement('tr');
+    const ongoing = c.status === 'Ongoing';
+    const inAvg = k === 0 ? 'Only if included' : ongoing ? 'No (ongoing)' : 'Yes';
+    tr.innerHTML = `<td>${c.name}</td><td>${fmtDate(c.start)}</td><td>${ongoing ? 'Ongoing (to ' + fmtDate(c.end) + ')' : fmtDate(c.end)}</td><td>${c.days}</td>` +
+      `<td>${fmt(c.startClose)}</td><td>${fmt(c.peakClose)}</td><td>${fmtDate(c.peakDate)}</td>` +
+      `<td>${c.multiple.toLocaleString('en-US', { maximumFractionDigits: 1 })}x</td>` +
+      `<td class="${ongoing ? 'status-ongoing' : ''}">${c.status}</td><td data-k="${k}">${inAvg}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+function renderSummaryInAverage() {
+  const cells = document.querySelectorAll('#summary td[data-k]');
+  cells.forEach(td => {
+    const k = Number(td.dataset.k);
+    if (k === 0) td.textContent = includeBull1() ? 'Yes' : 'No (optional)';
+  });
+}
+
+function setupHover() {
+  const card = document.querySelector('.chart-card');
+  const tip = document.getElementById('tip');
+  const cross = el('line', { y1: PAD.t, y2: PAD.t + plotH, stroke: '#D89B2B', 'stroke-width': 1, 'stroke-dasharray': '4 4', display: 'none' }, svg);
+  const hide = () => { tip.style.display = 'none'; cross.setAttribute('display', 'none'); };
+  svg.addEventListener('pointermove', e => {
+    const rect = svg.getBoundingClientRect();
+    const sx = (e.clientX - rect.left) * W / rect.width;
+    if (sx < PAD.l || sx > PAD.l + plotW) return hide();
+    const d = Math.min(maxDays, Math.max(1, Math.round((sx - PAD.l) / plotW * (maxDays - 1)) + 1));
+    cross.setAttribute('x1', x(d));
+    cross.setAttribute('x2', x(d));
+    cross.setAttribute('display', 'inline');
+    const rows = lines
+      .filter(l => l.visible && l.values[d - 1] !== undefined)
+      .map(l => {
+        const k = Number(l.key.slice(1));
+        return `<div class="row"><span class="dot" style="background:${l.colour}"></span><span>${l.label}</span>` +
+               `<span class="val"><span class="dt">${fmtDate(cycles[k].dates[d - 1])}</span> · ${fmtX(l.values[d - 1])}</span></div>`;
+      }).join('');
+    const avgRow = (avgLine.visible && avgLine.values[d - 1] !== undefined)
+      ? `<div class="row"><span class="dot" style="background:${AVG_COLOUR}"></span><span>${avgLine.label}</span><span class="val">${fmtX(avgLine.values[d - 1])}</span></div>`
+      : '';
+    tip.innerHTML = `<strong>Day ${d}</strong>` + (rows + avgRow || '<div class="row">No visible cycle on this day</div>');
+    tip.style.display = 'block';
+    const cr = card.getBoundingClientRect();
+    let left = e.clientX - cr.left + 14;
+    if (left + tip.offsetWidth > cr.width) left = e.clientX - cr.left - tip.offsetWidth - 14;
+    tip.style.left = Math.max(0, left) + 'px';
+    tip.style.top = (e.clientY - cr.top + 14) + 'px';
+  });
+  svg.addEventListener('pointerleave', hide);
+}
+
+drawAxes();
+drawLines();
+computeAverage();
+paths.avg.setAttribute('d', pathFor(avgLine.values));
+buildLegend();
+document.getElementById('btn-avg').querySelector('.label').textContent = avgLine.label;
+buildSummary();
+renderSummaryInAverage();
+setupHover();
+document.querySelectorAll('input[name="stat"]').forEach(r => r.addEventListener('change', refreshAverage));
+document.getElementById('inc1').addEventListener('change', refreshAverage);
+</script>
+</body>
+</html>
