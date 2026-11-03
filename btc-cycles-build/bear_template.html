@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bitcoin Bear Cycles</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23202A35'/><text x='16' y='22' text-anchor='middle' font-family='Montserrat,Arial,sans-serif' font-weight='800' font-size='15' fill='%23D89B2B'>XC</text></svg>">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* Plan: Xumit Capital brand. A single chart with a clickable legend, and a table of the five cycles. Navy band with logo and gold rule; navy and gold palette. */
+:root {
+  --navy: #202A35; --gold: #D89B2B;
+  --bg: #F5F7FA; --surface: #FFFFFF; --ink: #202A35; --muted: #5B6A7A;
+  --line: #DDE3EA; --accent: #202A35; --pos: #1E7A46; --neg: #B3261E;
+  --grid: #E3E8EE;
+  --font-head: "Montserrat", Arial, Helvetica, sans-serif;
+  --font-body: "Source Sans 3", Arial, Helvetica, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #161D25; --surface: #202A35; --ink: #E6EBF1; --muted: #93A0AE;
+    --line: #2C3846; --accent: #D89B2B; --pos: #5CC286; --neg: #F07A70; --grid: #2C3846;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #161D25; --surface: #202A35; --ink: #E6EBF1; --muted: #93A0AE;
+  --line: #2C3846; --accent: #D89B2B; --pos: #5CC286; --neg: #F07A70; --grid: #2C3846;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 15px; line-height: 1.5;
+  padding: 0 16px 48px;
+}
+main { max-width: 1120px; margin: 0 auto; }
+.brand { background: var(--navy); border-bottom: 3px solid var(--gold); margin: 0 -16px; padding: 18px 16px; }
+.brand-inner { max-width: 1120px; margin: 0 auto; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.logo { height: 64px; width: auto; display: block; }
+.brand h1 { font-family: var(--font-head); color: #FFFFFF; font-size: 24px; font-weight: 800; margin: 0; }
+.brand .sub { color: #BFC9D4; margin: 2px 0 0; font-size: 14px; }
+h2 { font-family: var(--font-head); font-size: 18px; margin: 28px 0 10px; font-weight: 700; }
+.intro { color: var(--muted); font-size: 14px; max-width: 72ch; margin: 16px 0 10px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 12px; }
+.toggle {
+  font: inherit; font-family: var(--font-head); font-weight: 600; font-size: 13px;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 7px 12px; border-radius: 6px; border: 1px solid var(--line);
+  background: var(--surface); color: var(--ink); cursor: pointer;
+}
+.toggle .dot { width: 14px; height: 4px; border-radius: 2px; display: inline-block; }
+.toggle[aria-pressed="false"] { opacity: 0.45; }
+.toggle:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.hint { font-size: 13px; color: var(--muted); margin: 0 0 6px; }
+svg { width: 100%; height: auto; display: block; }
+.chart-card { background: var(--navy); border-color: var(--navy); position: relative; --grid: #2C3846; --muted: #BFC9D4; }
+.chart-card .toggle { background: #FFFFFF; color: #202A35; border-color: #FFFFFF; }
+.chart-card .toggle[aria-pressed="false"] { background: #3A4757; color: #BFC9D4; border-color: #3A4757; opacity: 1; }
+.tip {
+  position: absolute; display: none; pointer-events: none; z-index: 2;
+  background: #FFFFFF; color: #202A35; border: 1px solid var(--gold); border-radius: 6px;
+  padding: 8px 10px; font-size: 13px; min-width: 210px; box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+.tip strong { font-family: var(--font-head); font-size: 13px; }
+.tip .row { display: flex; align-items: center; gap: 8px; margin-top: 3px; white-space: nowrap; }
+.tip .dot { width: 12px; height: 4px; border-radius: 2px; display: inline-block; flex: none; box-shadow: 0 0 0 1px #202A35; }
+.chart-card .toggle .dot { box-shadow: 0 0 0 1px #202A35; }
+.tip .val { margin-left: auto; font-variant-numeric: tabular-nums; padding-left: 12px; }
+.axis-label { font-size: 12px; fill: var(--muted); font-family: var(--font-body); }
+.tick { font-size: 11px; fill: var(--muted); font-family: var(--font-body); }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+th, td { padding: 8px 10px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { font-family: var(--font-head); font-size: 12px; color: var(--muted); font-weight: 600; }
+th:first-child, td:first-child { text-align: left; }
+.scroll { overflow-x: auto; }
+.neg { color: var(--neg); font-weight: 600; }
+.notes { margin-top: 24px; color: var(--muted); font-size: 13px; max-width: 80ch; }
+.notes ul { padding-left: 18px; margin: 6px 0; }
+@media (max-width: 480px) { .brand h1 { font-size: 20px; } body { font-size: 14px; } }
+</style>
+</head>
+<body>
+<header class="brand">
+  <div class="brand-inner">
+    <img class="logo" alt="Xumit Capital" src="data:image/png;base64,/*LOGO*/">
+    <div>
+      <h1>Bitcoin Bear Cycles</h1>
+      <p class="sub">Each bear cycle from its peak close, rebased to 1.00 on its first day. Prices in USD. Data through /*ASOFDATE*/.</p>
+    </div>
+  </div>
+</header>
+<main>
+  <p class="intro">Each line is one bear cycle. Click a cycle name to hide or show its line. All five are shown by default. The Average line is the mean of whichever cycles are running on each day.</p>
+
+  <div class="card chart-card" id="chartCard">
+    <div class="legend" id="legend" role="group" aria-label="Show or hide cycles"></div>
+    <div class="scroll"><svg id="chart" viewBox="0 0 900 440" role="img" aria-label="Bitcoin bear cycles, price relative to cycle start"></svg></div>
+    <div class="tip" id="tip" role="status" aria-live="off"></div>
+  </div>
+
+  <h2>Cycle summary</h2>
+  <div class="card scroll">
+    <table id="summary">
+      <thead>
+        <tr>
+          <th scope="col">Cycle</th><th scope="col">From</th><th scope="col">To</th><th scope="col">Days</th>
+          <th scope="col">Start close</th><th scope="col">End close</th><th scope="col">Change</th>
+          <th scope="col">Lowest (x)</th><th scope="col">Lowest on</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="notes">
+    <ul>
+      <li>Cycle dates are the agreed windows. Each line uses the daily close, divided by the close on the first day of its cycle.</li>
+      <li>Change is the close on the last day of the cycle relative to the first day. Lowest (x) is the lowest value of the line, as a multiple of the starting close.</li>
+      <li>Historical figures for information only. Past performance is not a reliable guide to future returns. Not investment advice.</li>
+    </ul>
+  </div>
+</main>
+
+<script>
+const DATA = /*DATA*/;
+const COLOURS = ['#4285F4', '#EA4335', '#FBBC04', '#34A853', '#FFFFFF'];
+const AVG_COLOUR = '#46BDC6';
+
+const W = 900, H = 440, PAD = { l: 60, r: 150, t: 20, b: 52 };
+const plotW = W - PAD.l - PAD.r, plotH = H - PAD.t - PAD.b;
+
+const cycles = DATA.cycles;
+const maxDays = Math.max(...cycles.map(c => c.series.length));
+const yMax = Math.ceil(Math.max(...cycles.flatMap(c => c.series)) * 10) / 10 || 1.1;
+
+// Average of the cycles running on each day
+const avg = [];
+for (let i = 0; i < maxDays; i++) {
+  const vals = cycles.map(c => c.series[i]).filter(v => v !== undefined);
+  avg.push(vals.reduce((a, b) => a + b, 0) / vals.length);
+}
+
+const lines = cycles.map((c, k) => ({ key: 'c' + k, label: c.name, colour: COLOURS[k], values: c.series, width: 2, visible: true }));
+lines.push({ key: 'avg', label: 'Average', colour: AVG_COLOUR, values: avg, width: 4, visible: true });
+
+const x = d => PAD.l + (d - 1) / (maxDays - 1) * plotW;
+const y = v => PAD.t + (1 - v / yMax) * plotH;
+
+function el(tag, attrs, parent) {
+  const n = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
+  if (parent) parent.appendChild(n);
+  return n;
+}
+
+const svg = document.getElementById('chart');
+function drawAxes() {
+  const yTicks = 6;
+  for (let i = 0; i <= yTicks; i++) {
+    const v = yMax * i / yTicks;
+    el('line', { x1: PAD.l, x2: PAD.l + plotW, y1: y(v), y2: y(v), stroke: 'var(--grid)', 'stroke-width': 1 }, svg);
+    const t = el('text', { x: PAD.l - 8, y: y(v) + 4, 'text-anchor': 'end', class: 'tick' }, svg);
+    t.textContent = v.toFixed(1);
+  }
+  for (let d = 1; d <= maxDays; d += 50) {
+    const t = el('text', { x: x(d), y: PAD.t + plotH + 18, 'text-anchor': 'middle', class: 'tick' }, svg);
+    t.textContent = d;
+  }
+  el('line', { x1: PAD.l, x2: PAD.l + plotW, y1: PAD.t + plotH, y2: PAD.t + plotH, stroke: 'var(--muted)', 'stroke-width': 1 }, svg);
+  const xl = el('text', { x: PAD.l + plotW / 2, y: H - 10, 'text-anchor': 'middle', class: 'axis-label' }, svg);
+  xl.textContent = 'Days from cycle start';
+  const yl = el('text', { x: 16, y: PAD.t + plotH / 2, 'text-anchor': 'middle', class: 'axis-label', transform: `rotate(-90 16 ${PAD.t + plotH / 2})` }, svg);
+  yl.textContent = 'Price relative to cycle start (x)';
+}
+
+const paths = {};
+function drawLines() {
+  lines.forEach(line => {
+    let d = '';
+    line.values.forEach((v, i) => {
+      if (v === undefined || v === null || Number.isNaN(v)) return;
+      d += (d ? 'L' : 'M') + x(i + 1).toFixed(1) + ' ' + y(v).toFixed(1);
+    });
+    paths[line.key] = el('path', { d, fill: 'none', stroke: line.colour, 'stroke-width': line.width, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, svg);
+  });
+}
+
+function setVisible(line, on) {
+  line.visible = on;
+  paths[line.key].setAttribute('display', on ? 'inline' : 'none');
+  const btn = document.getElementById('btn-' + line.key);
+  btn.setAttribute('aria-pressed', String(on));
+}
+
+function buildLegend() {
+  const legend = document.getElementById('legend');
+  lines.forEach(line => {
+    const b = document.createElement('button');
+    b.className = 'toggle';
+    b.id = 'btn-' + line.key;
+    b.type = 'button';
+    b.setAttribute('aria-pressed', 'true');
+    b.innerHTML = `<span class="dot" style="background:${line.colour}"></span>${line.label}`;
+    b.addEventListener('click', () => setVisible(line, !line.visible));
+    legend.appendChild(b);
+  });
+}
+
+function buildSummary() {
+  const tbody = document.querySelector('#summary tbody');
+  const fmt = n => n.toLocaleString('en-US', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
+  const day = s => new Date(s + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+  cycles.forEach(c => {
+    const tr = document.createElement('tr');
+    const cls = c.changePct < 0 ? 'neg' : '';
+    tr.innerHTML = `<td>${c.name}</td><td>${day(c.start)}</td><td>${day(c.end)}</td><td>${c.days}</td>` +
+      `<td>${fmt(c.startClose)}</td><td>${fmt(c.endClose)}</td>` +
+      `<td class="${cls}">${c.changePct.toFixed(1)}%</td><td>${c.troughX.toFixed(2)}</td><td>${day(c.troughDate)}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function fmtDate(s) {
+  return new Date(s + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+}
+
+function setupHover() {
+  const card = document.getElementById('chartCard');
+  const tip = document.getElementById('tip');
+  const cross = el('line', { y1: PAD.t, y2: PAD.t + plotH, stroke: '#D89B2B', 'stroke-width': 1, 'stroke-dasharray': '4 4', display: 'none' }, svg);
+  const hide = () => { tip.style.display = 'none'; cross.setAttribute('display', 'none'); };
+  svg.addEventListener('pointermove', e => {
+    const rect = svg.getBoundingClientRect();
+    const sx = (e.clientX - rect.left) * W / rect.width;
+    if (sx < PAD.l || sx > PAD.l + plotW) return hide();
+    const d = Math.min(maxDays, Math.max(1, Math.round((sx - PAD.l) / plotW * (maxDays - 1)) + 1));
+    cross.setAttribute('x1', x(d));
+    cross.setAttribute('x2', x(d));
+    cross.setAttribute('display', 'inline');
+    const rows = lines
+      .filter(l => l.visible && l.values[d - 1] !== undefined && !Number.isNaN(l.values[d - 1]))
+      .map(l => {
+        const when = l.key === 'avg' ? '' : fmtDate(cycles[Number(l.key.slice(1))].dates[d - 1]);
+        return `<div class="row"><span class="dot" style="background:${l.colour}"></span>` +
+               `<span>${l.label}</span><span class="val">${when ? when + ' · ' : ''}${l.values[d - 1].toFixed(3)} x</span></div>`;
+      }).join('');
+    tip.innerHTML = `<strong>Day ${d}</strong>` + (rows || '<div class="row">No visible cycle on this day</div>');
+    tip.style.display = 'block';
+    const cr = card.getBoundingClientRect();
+    let left = e.clientX - cr.left + 14;
+    if (left + tip.offsetWidth > cr.width) left = e.clientX - cr.left - tip.offsetWidth - 14;
+    tip.style.left = Math.max(0, left) + 'px';
+    tip.style.top = (e.clientY - cr.top + 14) + 'px';
+  });
+  svg.addEventListener('pointerleave', hide);
+}
+
+drawAxes();
+drawLines();
+buildLegend();
+buildSummary();
+setupHover();
+</script>
+</body>
+</html>
