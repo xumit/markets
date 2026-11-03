@@ -48,6 +48,9 @@ Public dashboards for Indian equities, built from the daily NSE bhavcopy.
   monthly gold price returns (USD per troy ounce, from January 1968), with statistics by calendar month and by
   election-cycle group. Self-contained.
   Prices from 1994 come from TradingView (TVC:GOLD); earlier months are from the original workbook. The current month is left out until it ends.
+- `nifty-monthly-returns/index.html` — **XC Nifty 50 Monthly Returns** (tools.xumitcapital.com/nifty-monthly-returns/):
+  monthly Nifty 50 price-index returns from January 1999, with statistics for the five-year cycle (3rd Year,
+  Pre-election, Election, Post-election, Mid-term). Prices from TradingView NSE:NIFTY; December 1998 close supplied as 884.25.
 - `index.html` — a fixed redirect to `indian-market-today/`. Do not overwrite it.
 
 The page is self-contained: all data for the as-of date is embedded, so there is
