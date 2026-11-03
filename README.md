@@ -44,6 +44,9 @@ Public dashboards for Indian equities, built from the daily NSE bhavcopy.
 - `sp500-monthly-returns/index.html` — **XC S&P 500 Monthly Returns** (tools.xumitcapital.com/sp500-monthly-returns/):
   monthly price-index returns of the S&P 500 (dividends not included), for all data from 1927 and since 1942,
   with statistics by calendar month and by election-cycle group. Self-contained.
+- `gold-monthly-returns/index.html` — **XC Gold Monthly Returns** (tools.xumitcapital.com/gold-monthly-returns/):
+  monthly gold price returns (USD per troy ounce, from January 1968), with statistics by calendar month and by
+  election-cycle group. Self-contained.
 - `index.html` — a fixed redirect to `indian-market-today/`. Do not overwrite it.
 
 The page is self-contained: all data for the as-of date is embedded, so there is
