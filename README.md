@@ -41,6 +41,9 @@ Public dashboards for Indian equities, built from the daily NSE bhavcopy.
 - `btc-halving-cycles/index.html` — **Bitcoin Halving-to-Halving Cycles** (tools.xumitcapital.com/btc-halving-cycles/):
   each period between halvings from its starting close, rebased to 1.00, on a log scale. Median or mean
   average, with H-H Cycle 1 optional. Click a cycle name to show or hide its line. Self-contained; figures from TradingView daily closes.
+- `sp500-monthly-returns/index.html` — **XC S&P 500 Monthly Returns** (tools.xumitcapital.com/sp500-monthly-returns/):
+  monthly price-index returns of the S&P 500 (dividends not included), for all data from 1927 and since 1942,
+  with statistics by calendar month and by election-cycle group. Self-contained.
 - `index.html` — a fixed redirect to `indian-market-today/`. Do not overwrite it.
 
 The page is self-contained: all data for the as-of date is embedded, so there is
