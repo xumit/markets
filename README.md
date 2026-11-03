@@ -47,6 +47,7 @@ Public dashboards for Indian equities, built from the daily NSE bhavcopy.
 - `gold-monthly-returns/index.html` — **XC Gold Monthly Returns** (tools.xumitcapital.com/gold-monthly-returns/):
   monthly gold price returns (USD per troy ounce, from January 1968), with statistics by calendar month and by
   election-cycle group. Self-contained.
+  Prices from 1994 come from TradingView (TVC:GOLD); earlier months are from the original workbook. The current month is left out until it ends.
 - `index.html` — a fixed redirect to `indian-market-today/`. Do not overwrite it.
 
 The page is self-contained: all data for the as-of date is embedded, so there is
