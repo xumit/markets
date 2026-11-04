@@ -6,7 +6,7 @@ Usage (from the repository root):
 <tv_response.json> is the saved TradingView get_ohlcv output for NSE:NIFTY, interval 1D.
 It accepts the rows layout ({"bars": [{"t": unix_seconds, "c": close, ...}]}) or the
 columns layout ({"bars": {"t": [...], "c": [...], ...}}).
-Bars dated today (UTC) or later are dropped: today's bar is still forming.
+Bars dated later than today (IST) are dropped, and so is today's bar until 16:00 IST.
 
 Each calendar month keeps the close of its last closed bar, so the current month
 updates daily and is finalised when the month ends. The builder shows complete
@@ -30,11 +30,16 @@ if isinstance(tv, dict):
 else:
     rows = tv
 
-today_utc = dt.datetime.now(dt.timezone.utc).date()
+# NSE closes 15:30 IST; a bar is kept once that session is over (16:00 IST gives margin).
+# Today's bar is only dropped while the session is still running.
+IST = dt.timezone(dt.timedelta(hours=5, minutes=30))
+now_ist = dt.datetime.now(IST)
+today_ist = now_ist.date()
+session_over = now_ist.hour >= 16
 latest = {}
 for b in rows:
-    d = dt.datetime.fromtimestamp(b['t'], dt.timezone.utc).date()
-    if d >= today_utc:
+    d = dt.datetime.fromtimestamp(b['t'], IST).date()
+    if d > today_ist or (d == today_ist and not session_over):
         continue
     prev = latest.get(d.strftime('%Y-%m'))
     if prev is None or d.isoformat() >= prev['last']:
